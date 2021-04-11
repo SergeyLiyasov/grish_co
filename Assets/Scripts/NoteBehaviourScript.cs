@@ -12,7 +12,7 @@ public class NoteBehaviourScript : MonoBehaviour
 
     void Start()
     {
-        
+        GM.noteButtons.Add(Button);
     }
     
     void Update()

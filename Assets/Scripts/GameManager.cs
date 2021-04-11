@@ -6,21 +6,26 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private Dictionary<ButtonBehaviourScript, Queue<NoteBehaviourScript>> notesToBePressed;
+    public HashSet<ButtonBehaviourScript> noteButtons = new HashSet<ButtonBehaviourScript>();
 
     void Start()
     {
         notesToBePressed = new Dictionary<ButtonBehaviourScript, Queue<NoteBehaviourScript>>();
+        foreach (var button in noteButtons)
+        {
+            Debug.Log(button + "initiated");
+            notesToBePressed[button] = new Queue<NoteBehaviourScript>();
+        }
+            
     }
 
     void Update()
     {
-        
+
     }
 
     public void RegisterNote(NoteBehaviourScript note)
     {
-        if (!notesToBePressed.ContainsKey(note.Button))
-            notesToBePressed[note.Button] = new Queue<NoteBehaviourScript>();
         notesToBePressed[note.Button].Enqueue(note);
     }
 
@@ -33,12 +38,9 @@ public class GameManager : MonoBehaviour
 
     public void ReceiveSignal(ButtonBehaviourScript button)
     {
-        if (!notesToBePressed.ContainsKey(button) || notesToBePressed[button].Count == 0)
+        if (notesToBePressed[button].Count != 0)
         {
-            DecreaseScore();
-        }
-        else
-        {
+            Debug.Log(button + "pressed");
             var note = notesToBePressed[button].Dequeue();
             var accuracy = note.GetPressed();
             IncreaseScore();
