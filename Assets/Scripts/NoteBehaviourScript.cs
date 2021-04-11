@@ -17,7 +17,7 @@ public class NoteBehaviourScript : MonoBehaviour
     
     void Update()
     {
-        transform.position += new Vector3(0, -1.5f * Time.deltaTime);
+        
     }
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
