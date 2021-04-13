@@ -19,7 +19,7 @@ public class ButtonBehaviourScript : MonoBehaviour
     {
         if (Input.GetKeyDown(Key))
         {
-            GM.ReceiveSignal(this);
+            //GM.ReceiveSignal(this);
             spriteRenderer.sprite = PressedSprite;
         }
         else if (Input.GetKeyUp(Key))
