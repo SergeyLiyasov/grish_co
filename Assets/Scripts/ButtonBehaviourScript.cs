@@ -9,6 +9,7 @@ public class ButtonBehaviourScript : MonoBehaviour
     public Sprite Sprite;
     public Sprite PressedSprite; 
     public KeyCode Key;
+    public NoteBehaviourScript PressedNote;
 
     void Start()
     {
@@ -19,7 +20,8 @@ public class ButtonBehaviourScript : MonoBehaviour
     {
         if (Input.GetKeyDown(Key))
         {
-            //GM.ReceiveSignal(this);
+            PressedNote = GM.ReceiveSignal(this);
+            Debug.Log(PressedNote);
             spriteRenderer.sprite = PressedSprite;
         }
         else if (Input.GetKeyUp(Key))

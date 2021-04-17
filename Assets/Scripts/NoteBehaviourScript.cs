@@ -6,36 +6,44 @@ using UnityEngine.UIElements;
 
 public class NoteBehaviourScript : MonoBehaviour
 {
-    //public GameManager GM;
     public ButtonBehaviourScript Button;
     private bool wasPressed;
     public bool canBePressed;
+    public bool isLongNote;
+    public bool registered = false;
+    public GameManager GM;
 
     void Start()
     {
-        //GM.noteButtons.Add(Button);
+        //GameManager.instance.NormalHit();
+        GM.noteButtons.Add(Button);
     }
     
     void Update()
     {
-        if (Input.GetKeyDown(Button.Key) && canBePressed)
-        {
-            gameObject.SetActive(false);
-
-            var buttonPosition = Button.GetComponent<Transform>().position.y;
-
-            if (Mathf.Abs(transform.position.y - buttonPosition) > 1)
+        if (canBePressed)
+        {            
+            if (!registered)
             {
-                GameManager.instance.NormalHit();
+                GM.RegisterNote(this);
+                registered = true;
             }
-            else if (Mathf.Abs(transform.position.y - buttonPosition) > 0.35)
+                
+            if (Button.PressedNote == this)
             {
-                GameManager.instance.GoodHit();
-            }
-            else if (Mathf.Abs(transform.position.y - buttonPosition) > 0.05)
-                GameManager.instance.PerfectHit();
-            else
-                GameManager.instance.RainbowHit();
+                var buttonPosition = Button.GetComponent<Transform>().position.y;
+
+                if (Mathf.Abs(transform.position.y - buttonPosition) > 1)
+                    GameManager.instance.NormalHit();
+                else if (Mathf.Abs(transform.position.y - buttonPosition) > 0.35)
+                    GameManager.instance.GoodHit();
+                else if (Mathf.Abs(transform.position.y - buttonPosition) > 0.05)
+                    GameManager.instance.PerfectHit();
+                else
+                    GameManager.instance.RainbowHit();
+                gameObject.SetActive(false);
+                
+            }      
         }
     }
 
@@ -43,7 +51,7 @@ public class NoteBehaviourScript : MonoBehaviour
     {
         if (otherCollider.tag == "Activator")
         {
-            //GM.RegisterNote(this);
+            GameManager.instance.RegisterNote(this);
             canBePressed = true;
         }
     }
@@ -51,7 +59,7 @@ public class NoteBehaviourScript : MonoBehaviour
     {
         if (otherCollider.tag == "Activator" && !wasPressed)
         {
-            //GM.OutdateNote(this);
+            GameManager.instance.OutdateNote(this);
             canBePressed = false;
         }
     }
