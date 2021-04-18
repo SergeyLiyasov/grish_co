@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-    public Dictionary<ButtonBehaviourScript, Queue<NoteBehaviourScript>> notesToBePressed = new Dictionary<ButtonBehaviourScript, Queue<NoteBehaviourScript>>();
-    //public Dictionary<ButtonBehaviourScript, Queue<NoteBehaviourScript>> pressedNotes = new Dictionary<ButtonBehaviourScript, Queue<NoteBehaviourScript>>();
+    public Dictionary<ButtonBehaviourScript, Queue<BaseNote>> notesToBePressed = new Dictionary<ButtonBehaviourScript, Queue<BaseNote>>();
     public HashSet<ButtonBehaviourScript> noteButtons = new HashSet<ButtonBehaviourScript>();
+    public Dictionary<ButtonBehaviourScript, bool> skipNextNote = new Dictionary<ButtonBehaviourScript, bool>();
     public static GameManager instance;
     private int score = 0;
 
@@ -17,9 +17,9 @@ public class GameManager : MonoBehaviour
         instance = this;
         foreach (var button in noteButtons)
         {
-            Debug.Log(button + "initiated");
-            notesToBePressed[button] = new Queue<NoteBehaviourScript>();
-            //pressedNotes[button] = new Queue<NoteBehaviourScript>();
+            //Debug.Log(button + "initiated");
+            notesToBePressed[button] = new Queue<BaseNote>();
+            skipNextNote[button] = false;
         }     
     }
 
@@ -56,23 +56,33 @@ public class GameManager : MonoBehaviour
         Debug.Log("Marvelous hit");
     }
 
-    public void RegisterNote(NoteBehaviourScript note)
+    public void RegisterNote(BaseNote note)
     {
-        notesToBePressed[note.Button].Enqueue(note);
-        Debug.Log("Note hit");
+        if (skipNextNote[note.Button] == true)
+        {
+            //Debug.Log(skipNextNote[note.Button]);
+            skipNextNote[note.Button] = false;
+        }
+        else
+        {
+            notesToBePressed[note.Button].Enqueue(note);
+            Debug.Log("Note registered " + note);
+        }
     }
 
-    public void OutdateNote(NoteBehaviourScript note)
+    public void OutdateNote(BaseNote note)
     {
-        if (!notesToBePressed.TryGetValue(note.Button, out var q) || q.Count == 0 || q.Dequeue() != note)
+        if (!notesToBePressed.TryGetValue(note.Button, out var q) || q.Count == 0 || q.Peek() != note)
             throw new Exception("Note outdating before registering");
+        notesToBePressed[note.Button].Dequeue();
+        Debug.Log("Note out " + note);
         //DecreaseScore();
     }
 
-    public NoteBehaviourScript ReceiveSignal(ButtonBehaviourScript button)
+    public BaseNote ReceiveSignal(ButtonBehaviourScript button)
     {
-        if (notesToBePressed[button].Count != 0)
-        {
+        if (notesToBePressed[button].Count != 0 && !(notesToBePressed[button].Peek() is LongNoteEnd))
+        { 
             Debug.Log(button + "pressed");
             return notesToBePressed[button].Dequeue();
             //var accuracy = note.GetPressed();

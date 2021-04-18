@@ -4,33 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class NoteBehaviourScript : MonoBehaviour
+public class NoteBehaviourScript : BaseNote
 {
-    public ButtonBehaviourScript Button;
-    private bool wasPressed;
-    public bool canBePressed;
-    public bool isLongNote;
-    public bool registered = false;
-    public GameManager GM;
-
     void Start()
     {
-        //GameManager.instance.NormalHit();
         GM.noteButtons.Add(Button);
     }
     
     void Update()
     {
         if (canBePressed)
-        {            
-            if (!registered)
-            {
-                GM.RegisterNote(this);
-                registered = true;
-            }
-                
+        {
             if (Button.PressedNote == this)
             {
+                //wasPressed = true;
+
                 var buttonPosition = Button.GetComponent<Transform>().position.y;
 
                 if (Mathf.Abs(transform.position.y - buttonPosition) > 1)
@@ -41,32 +29,30 @@ public class NoteBehaviourScript : MonoBehaviour
                     GameManager.instance.PerfectHit();
                 else
                     GameManager.instance.RainbowHit();
+
                 gameObject.SetActive(false);
                 
-            }      
-        }
+            }
+        }              
     }
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
     {
         if (otherCollider.tag == "Activator")
         {
+            Debug.Log("Note registered " + this);
             GameManager.instance.RegisterNote(this);
             canBePressed = true;
         }
     }
+
     private void OnTriggerExit2D(Collider2D otherCollider)
     {
         if (otherCollider.tag == "Activator" && !wasPressed)
         {
+            Debug.Log("Note exited " + this);
             GameManager.instance.OutdateNote(this);
             canBePressed = false;
         }
     }
-
-    //public double GetPressed()
-    //{
-    //    wasPressed = true;
-    //    return 1;
-    //}
 }
