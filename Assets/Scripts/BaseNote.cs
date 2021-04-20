@@ -6,11 +6,9 @@ using UnityEngine.UIElements;
 
 public class BaseNote : MonoBehaviour
 {
-    public ButtonBehaviourScript Button;
-    public bool wasPressed = false;
-    public bool canBePressed;
-    public bool registered = false;
-    public GameManager GM;
+    public Button Button;
+    public bool WasPressed { get; set; }
+    public bool CanBePressed { get; set; }
 
     void Start()
     {
@@ -21,6 +19,4 @@ public class BaseNote : MonoBehaviour
     {
         
     }
-
-    
 }

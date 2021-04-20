@@ -4,37 +4,31 @@ using UnityEngine;
 
 public class LongNoteEnd : BaseNote
 {
-    // Start is called before the first frame update
     void Start()
     {
-        GM.noteButtons.Add(Button);
+        GameManager.Instance.NoteButtons.Add(Button);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        if (canBePressed)
-        {
-
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
     {
         if (otherCollider.tag == "Activator")
         {
-            GameManager.instance.RegisterNote(this);
-            canBePressed = true;
+            GameManager.Instance.RegisterNote(this);
+            CanBePressed = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D otherCollider)
     {
-        if (otherCollider.tag == "Activator" && !wasPressed)
+        if (otherCollider.tag == "Activator" && !WasPressed)
         {
             Debug.Log(this);
-            GameManager.instance.OutdateNote(this);
-            canBePressed = false;
+            GameManager.Instance.OutdateNote(this);
+            CanBePressed = false;
         }
     }
 }

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonBehaviourScript : MonoBehaviour
+public class Button : MonoBehaviour
 {
-    public GameManager GM;
     private SpriteRenderer spriteRenderer;
     public Sprite Sprite;
     public Sprite PressedSprite; 
@@ -20,9 +19,9 @@ public class ButtonBehaviourScript : MonoBehaviour
     {
         if (Input.GetKeyDown(Key))
         {
-            PressedNote = GM.ReceiveSignal(this);
+            PressedNote = GameManager.Instance.ReceiveSignal(this);
             if (PressedNote != null)
-                PressedNote.wasPressed = true;
+                PressedNote.WasPressed = true;
             Debug.Log(PressedNote);
             spriteRenderer.sprite = PressedSprite;
         }
