@@ -17,9 +17,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
     
-    private int score = 0;
+    private int score;
 
-    public GameManager() : base()
+    public GameManager()
     {
         Instance = this;
     }
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     public void RegisterNote(BaseNote note)
     {
-        if (SkipNextNote[note.Button] == true)
+        if (SkipNextNote[note.Button])
         {
             SkipNextNote[note.Button] = false;
         }

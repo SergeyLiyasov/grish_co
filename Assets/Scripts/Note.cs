@@ -16,12 +16,13 @@ public class Note : BaseNote
         if (CanBePressed && Button.PressedNote == this)
         {
             var buttonPosition = Button.GetComponent<Transform>().position.y;
+            var distance = Mathf.Abs(transform.position.y - buttonPosition);
 
-            if (Mathf.Abs(transform.position.y - buttonPosition) > 1)
+            if (distance > 1)
                 GameManager.Instance.NormalHit();
-            else if (Mathf.Abs(transform.position.y - buttonPosition) > 0.35)
+            else if (distance > 0.35)
                 GameManager.Instance.GoodHit();
-            else if (Mathf.Abs(transform.position.y - buttonPosition) > 0.05)
+            else if (distance > 0.05)
                 GameManager.Instance.PerfectHit();
             else
                 GameManager.Instance.RainbowHit();
