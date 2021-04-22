@@ -39,6 +39,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Backgroung
+    uniqueID: 904878603
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Notes
+    uniqueID: 3534016155
     locked: 0

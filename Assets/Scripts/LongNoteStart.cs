@@ -1,65 +1,52 @@
-using System;
 using UnityEngine;
 
 public class LongNoteStart : BaseNote
 {
-    void Start()
+    [SerializeField] private Button button;
+    public override Button Button => button;
+    public int PressingScore { get; set; }
+    public double? PressingTime { get; set; }
+    public override bool WasPressed { get; set; }
+
+    public override int ReceiveSignal(bool activating)
     {
-        GameManager.Instance.NoteButtons.Add(Button);
-    }
-    
-    void Update()
-    {
-        if (WasPressed)
-        {
-            var buttonPosition = Button.GetComponent<Transform>().position;
-            if (Input.GetKey(Button.Key))
-            {
-                transform.position = new Vector3(transform.position.x, buttonPosition.y);
-            }
-            else if (GameManager.Instance.NotesToBePressed[Button].Count == 0)
-            {
-                Debug.Log(GameManager.Instance.NotesToBePressed[Button].Count);
-                Debug.Log("Long note pressed badly");
-                gameObject.SetActive(false);
-                GameManager.Instance.SkipNextNote[Button] = true;
-            }
-            else if (GameManager.Instance.NotesToBePressed[Button].Peek() is LongNoteEnd)
-            {
-                Debug.Log(GameManager.Instance.NotesToBePressed[Button].Peek());
-                var noteEnd = GameManager.Instance.NotesToBePressed[Button].Dequeue();
-                noteEnd.WasPressed = true;
-                noteEnd.gameObject.SetActive(false);
-                gameObject.SetActive(false);
-                Debug.Log("Long note pressed correctly");
-            }
-            else
-            {
-                throw new Exception("Next object in queue is not LongNoteEnd");
-            }
-        }
-        else if (CanBePressed && Button.PressedNote == this)
-        {
-            WasPressed = true;
-        }
+        if (!activating) return 0;
+
+        var buttonPosition = Button.GetComponent<Transform>().position.y;
+        var distance = Mathf.Abs(transform.position.y - buttonPosition);
+
+        PressingScore =
+            distance > 1 ? NormalHit()
+            : distance > 0.35 ? GoodHit()
+            : distance > 0.05 ? PerfectHit()
+            : RainbowHit();
+        PressingTime = Time.timeAsDouble;
+
+        gameObject.SetActive(false);
+        return 0;
     }
 
-    private void OnTriggerEnter2D(Collider2D otherCollider)
+    private int NormalHit()
     {
-        if (otherCollider.tag == "Activator")
-        {
-            GameManager.Instance.RegisterNote(this);
-            CanBePressed = true;
-        }
+        Debug.Log("LongNoteStart: Okay hit");
+        return 100;
     }
 
-    private void OnTriggerExit2D(Collider2D otherCollider)
+    private int GoodHit()
     {
-        if (otherCollider.tag == "Activator" && !WasPressed)
-        {
-            Debug.Log(this);
-            GameManager.Instance.OutdateNote(this);
-            CanBePressed = false;
-        }
+        Debug.Log("LongNoteStart: Good hit");
+        return 200;
+    }
+
+    private int PerfectHit()
+    {
+        Debug.Log("LongNoteStart: Perfect hit");
+        return 300;
+    }
+
+    private int RainbowHit()
+    {
+        Debug.Log("LongNoteStart: Marvelous hit");
+        return 320;
     }
 }

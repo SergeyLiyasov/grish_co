@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Button : MonoBehaviour
 {
+    [SerializeField] private Sprite unpressedSprite;
+    [SerializeField] private Sprite pressedSprite;
     private SpriteRenderer spriteRenderer;
-    public Sprite Sprite;
-    public Sprite PressedSprite; 
     public KeyCode Key;
-    public BaseNote PressedNote;
+    public double PressedTime { get; set; }
 
     void Start()
     {
+        GameManager.Instance.NoteButtons.Add(this);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -19,15 +21,14 @@ public class Button : MonoBehaviour
     {
         if (Input.GetKeyDown(Key))
         {
-            PressedNote = GameManager.Instance.ReceiveSignal(this);
-            if (PressedNote != null)
-                PressedNote.WasPressed = true;
-            Debug.Log(PressedNote);
-            spriteRenderer.sprite = PressedSprite;
+            GameManager.Instance.ReceiveSignal(this, true);
+            PressedTime = Time.timeAsDouble;
+            spriteRenderer.sprite = pressedSprite;
         }
         else if (Input.GetKeyUp(Key))
         {
-            spriteRenderer.sprite = Sprite;
+            GameManager.Instance.ReceiveSignal(this, false);
+            spriteRenderer.sprite = unpressedSprite;
         }
     }
 }

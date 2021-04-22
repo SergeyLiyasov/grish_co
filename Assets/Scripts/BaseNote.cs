@@ -6,7 +6,23 @@ using UnityEngine.UIElements;
 
 public abstract class BaseNote : MonoBehaviour
 {
-    public Button Button;
-    public bool WasPressed { get; set; }
-    public bool CanBePressed { get; set; }
+    public abstract Button Button { get; }
+    public abstract bool WasPressed { get; set; }
+    public abstract int ReceiveSignal(bool activating);
+
+    private void OnTriggerEnter2D(Collider2D otherCollider)
+    {
+        if (otherCollider.tag == "Activator")
+        {
+            GameManager.Instance.RegisterNote(this);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D otherCollider)
+    {
+        if (otherCollider.tag == "Activator" && !WasPressed)
+        {
+            GameManager.Instance.OutdateNote(this);
+        }
+    }
 }

@@ -1,34 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using UnityEditor;
 using UnityEngine;
 
 public class LongNoteEnd : BaseNote
 {
-    void Start()
+    [SerializeField] private LongNoteStart start;
+    public override Button Button => start.Button;
+    public override bool WasPressed { get; set; }
+
+    public override int ReceiveSignal(bool activating)
     {
-        GameManager.Instance.NoteButtons.Add(Button);
-    }
-    
-    void Update()
-    {
+        if (activating || !start.PressingTime.HasValue || Button.PressedTime > start.PressingTime) return 0;
+
+        var buttonPosition = Button.GetComponent<Transform>().position.y;
+        var distance = Mathf.Abs(transform.position.y - buttonPosition);
+
+        var endPressingScore =
+            distance > 1 ? NormalHit()
+            : distance > 0.35 ? GoodHit()
+            : distance > 0.05 ? PerfectHit()
+            : RainbowHit();
+
+        gameObject.SetActive(false);
+        return (start.PressingScore + endPressingScore) / 2;
     }
 
-    private void OnTriggerEnter2D(Collider2D otherCollider)
+    private int NormalHit()
     {
-        if (otherCollider.tag == "Activator")
-        {
-            GameManager.Instance.RegisterNote(this);
-            CanBePressed = true;
-        }
+        Debug.Log("LongNoteEnd: Okay hit");
+        return 100;
     }
 
-    private void OnTriggerExit2D(Collider2D otherCollider)
+    private int GoodHit()
     {
-        if (otherCollider.tag == "Activator" && !WasPressed)
-        {
-            Debug.Log(this);
-            GameManager.Instance.OutdateNote(this);
-            CanBePressed = false;
-        }
+        Debug.Log("LongNoteEnd: Good hit");
+        return 200;
+    }
+
+    private int PerfectHit()
+    {
+        Debug.Log("LongNoteEnd: Perfect hit");
+        return 300;
+    }
+
+    private int RainbowHit()
+    {
+        Debug.Log("LongNoteEnd: Marvelous hit");
+        return 320;
     }
 }

@@ -6,48 +6,47 @@ using UnityEngine.UIElements;
 
 public class Note : BaseNote
 {
-    void Start()
-    {
-        GameManager.Instance.NoteButtons.Add(Button);
-    }
-    
-    void Update()
-    {
-        if (CanBePressed && Button.PressedNote == this)
-        {
-            var buttonPosition = Button.GetComponent<Transform>().position.y;
-            var distance = Mathf.Abs(transform.position.y - buttonPosition);
+    [SerializeField] private Button button;
+    public override Button Button => button;
 
-            if (distance > 1)
-                GameManager.Instance.NormalHit();
-            else if (distance > 0.35)
-                GameManager.Instance.GoodHit();
-            else if (distance > 0.05)
-                GameManager.Instance.PerfectHit();
-            else
-                GameManager.Instance.RainbowHit();
+    public override bool WasPressed { get; set; }
 
-            gameObject.SetActive(false);
-        }
+    public override int ReceiveSignal(bool activating)
+    {
+        if (!activating) return 0;
+        var buttonPosition = Button.GetComponent<Transform>().position.y;
+        var distance = Mathf.Abs(transform.position.y - buttonPosition);
+        var score =
+            distance > 1 ? NormalHit()
+            : distance > 0.35 ? GoodHit()
+            : distance > 0.05 ? PerfectHit()
+            : RainbowHit();
+
+        gameObject.SetActive(false);
+        return score;
     }
 
-    private void OnTriggerEnter2D(Collider2D otherCollider)
+    private int NormalHit()
     {
-        if (otherCollider.tag == "Activator")
-        {
-            Debug.Log("Note registered " + this);
-            GameManager.Instance.RegisterNote(this);
-            CanBePressed = true;
-        }
+        Debug.Log("Okay hit");
+        return 100;
     }
 
-    private void OnTriggerExit2D(Collider2D otherCollider)
+    private int GoodHit()
     {
-        if (otherCollider.tag == "Activator" && !WasPressed)
-        {
-            Debug.Log("Note exited " + this);
-            GameManager.Instance.OutdateNote(this);
-            CanBePressed = false;
-        }
+        Debug.Log("Good hit");
+        return 200;
+    }
+
+    private int PerfectHit()
+    {
+        Debug.Log("Perfect hit");
+        return 300;
+    }
+
+    private int RainbowHit()
+    {
+        Debug.Log("Marvelous hit");
+        return 320;
     }
 }
