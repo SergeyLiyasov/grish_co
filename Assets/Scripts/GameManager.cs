@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     public HashSet<Button> NoteButtons { get; set; } =
         new HashSet<Button>();
 
+    private int columnsNumber = 4;
+    private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
+    private double columnWidth = 2;
+
     public static GameManager Instance { get; private set; }
     
     private int score;
@@ -56,5 +60,12 @@ public class GameManager : MonoBehaviour
             var note = NotesToBePressed[button].Peek();
             score += note.ReceiveSignal(activating);
         }
+    }
+
+    public Vector2 GetColumnPosition(int index)
+    {
+        return index < columnsNumber
+            ? columnsPosition + new Vector2((float)(columnWidth * index), 0)
+            : throw new ArgumentException();
     }
 }
