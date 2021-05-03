@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
     private double columnWidth = 2;
 
     public static GameManager Instance { get; private set; }
-    
-    private int score;
+
+    [SerializeField] private int score;
 
     public GameManager() => Instance = this;
 
