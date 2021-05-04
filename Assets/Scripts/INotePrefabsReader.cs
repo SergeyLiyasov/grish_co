@@ -11,7 +11,7 @@ public interface INotePrefabsReader
     class NotePrefabDescriptor
     {
         public double Time { get; }
-        public string Type { get; }
+        public NoteType Type { get; }
         public int Column { get; }
     }
 }

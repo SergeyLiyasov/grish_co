@@ -154,9 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1094ec36da693c4fbc28cfd51aa3673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: 100
   unpressedSprite: {fileID: 21300000, guid: 313b5069117dac34898600b0c1001589, type: 3}
   pressedSprite: {fileID: 21300000, guid: 1fea3d91f6c1e5a4280daa654f96cdc5, type: 3}
-  Key: 100
 --- !u!212 &2342990
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -634,9 +634,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1094ec36da693c4fbc28cfd51aa3673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: 107
   unpressedSprite: {fileID: 21300000, guid: 4d5ae48371257994eac88cbd6e874973, type: 3}
   pressedSprite: {fileID: 21300000, guid: dcab4d7c592613a4d85dbc808bc2d607, type: 3}
-  Key: 107
 --- !u!212 &614808841
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -814,9 +814,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1094ec36da693c4fbc28cfd51aa3673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: 102
   unpressedSprite: {fileID: 21300000, guid: 7fe899b70cd394d4a9714ed7a16ed59d, type: 3}
   pressedSprite: {fileID: 21300000, guid: 5bb5569493145b5439fd1d3af88ba244, type: 3}
-  Key: 102
 --- !u!212 &1029963171
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1313,12 +1313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7728a9e54284c5f49af5a41bfa044591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bpm: 200
-  secPerBeat: 0
-  songPosition: 0
-  deltaSongPos: 0
-  mapOffset: 0
-  audioSource: {fileID: 0}
 --- !u!1 &1277763812
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,9 +1825,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1094ec36da693c4fbc28cfd51aa3673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: 106
   unpressedSprite: {fileID: 21300000, guid: d2bbbf10f5cd19f43a4fb8cfaa93aca0, type: 3}
   pressedSprite: {fileID: 21300000, guid: cfc2f64be5e33884cb9eb8f00ffd7ee6, type: 3}
-  Key: 106
 --- !u!212 &1855922571
 SpriteRenderer:
   m_ObjectHideFlags: 0

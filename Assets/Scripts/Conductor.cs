@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class Conductor : MonoBehaviour
 {
-    public float bpm = 200;
-    public float secPerBeat;
-    public float songPosition;
-    public float deltaSongPos;
-    public readonly float offset = 2.435f;
-    public float mapOffset;
-    public AudioSource audioSource;
-
+    public double SongPosition { get; private set; }
     public static Conductor Instance { get; private set; }
+    public float Bpm { get; set; }
+    public float SecPerBeat { get; set; }
+    public float MapOffset { get; set; }
+    public float Offset { get; set; }
 
     public Conductor() => Instance = this;
 
-    // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        secPerBeat = 60 / bpm;
-        deltaSongPos = (float)AudioSettings.dspTime;
+        Offset = 2.435f;
+        Bpm = 200;
+        SecPerBeat = 60 / Bpm;
+        deltaSongPos = AudioSettings.dspTime;
         audioSource.Play();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        songPosition = (float)(AudioSettings.dspTime - deltaSongPos - offset);
+        SongPosition = AudioSettings.dspTime - deltaSongPos - Offset;
     }
+
+    private AudioSource audioSource;
+    private double deltaSongPos;
 }

@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 public abstract class BaseNote : MonoBehaviour
 {
     public abstract Button Button { get; }
-    public abstract bool WasPressed { get; set; }
     public abstract int ReceiveSignal(bool activating);
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
@@ -20,7 +19,7 @@ public abstract class BaseNote : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D otherCollider)
     {
-        if (otherCollider.tag == "Activator" && !WasPressed)
+        if (otherCollider.tag == "Activator")
         {
             GameManager.Instance.OutdateNote(this);
         }

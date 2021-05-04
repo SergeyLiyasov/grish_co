@@ -6,47 +6,39 @@ using UnityEngine.UIElements;
 
 public class Note : BaseNote
 {
-    [SerializeField] private Button button;
     public override Button Button => button;
-
-    public override bool WasPressed { get; set; }
 
     public override int ReceiveSignal(bool activating)
     {
         if (!activating) return 0;
         var buttonPosition = Button.GetComponent<Transform>().position.y;
         var distance = Mathf.Abs(transform.position.y - buttonPosition);
-        var score =
-            distance > 1 ? NormalHit()
-            : distance > 0.35 ? GoodHit()
-            : distance > 0.05 ? PerfectHit()
-            : RainbowHit();
+        int score = GetPressingScore(distance);
 
         gameObject.SetActive(false);
         return score;
     }
 
-    private int NormalHit()
+    private int GetPressingScore(float distance)
     {
-        Debug.Log("Okay hit");
-        return 100;
-    }
-
-    private int GoodHit()
-    {
-        Debug.Log("Good hit");
-        return 200;
-    }
-
-    private int PerfectHit()
-    {
-        Debug.Log("Perfect hit");
-        return 300;
-    }
-
-    private int RainbowHit()
-    {
+        if (distance > 1)
+        {
+            Debug.Log("Okay hit");
+            return 100;
+        }
+        if (distance > 0.35)
+        {
+            Debug.Log("Good hit");
+            return 200;
+        }
+        if (distance > 0.05)
+        {
+            Debug.Log("Perfect hit");
+            return 300;
+        }
         Debug.Log("Marvelous hit");
         return 320;
     }
+
+    [SerializeField] private Button button;
 }

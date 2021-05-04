@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    [SerializeField] private Sprite unpressedSprite;
-    [SerializeField] private Sprite pressedSprite;
-    private SpriteRenderer spriteRenderer;
-    public KeyCode Key;
     public double PressedTime { get; set; }
 
     void Start()
@@ -19,16 +15,21 @@ public class Button : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(Key))
+        if (Input.GetKeyDown(key))
         {
             GameManager.Instance.ReceiveSignal(this, true);
             PressedTime = Time.timeAsDouble;
             spriteRenderer.sprite = pressedSprite;
         }
-        else if (Input.GetKeyUp(Key))
+        else if (Input.GetKeyUp(key))
         {
             GameManager.Instance.ReceiveSignal(this, false);
             spriteRenderer.sprite = unpressedSprite;
         }
     }
+
+    [SerializeField] private KeyCode key;
+    [SerializeField] private Sprite unpressedSprite;
+    [SerializeField] private Sprite pressedSprite;
+    private SpriteRenderer spriteRenderer;
 }

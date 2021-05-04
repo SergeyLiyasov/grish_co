@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class LongNoteStart : BaseNote
 {
-    [SerializeField] private Button button;
     public override Button Button => button;
     public int PressingScore { get; set; }
     public double? PressingTime { get; set; }
-    public override bool WasPressed { get; set; }
 
     public override int ReceiveSignal(bool activating)
     {
@@ -15,38 +13,33 @@ public class LongNoteStart : BaseNote
         var buttonPosition = Button.GetComponent<Transform>().position.y;
         var distance = Mathf.Abs(transform.position.y - buttonPosition);
 
-        PressingScore =
-            distance > 1 ? NormalHit()
-            : distance > 0.35 ? GoodHit()
-            : distance > 0.05 ? PerfectHit()
-            : RainbowHit();
+        PressingScore = GetPressingScore(distance);
         PressingTime = Time.timeAsDouble;
 
         gameObject.SetActive(false);
         return 0;
     }
 
-    private int NormalHit()
+    private int GetPressingScore(float distance)
     {
-        Debug.Log("LongNoteStart: Okay hit");
-        return 100;
-    }
-
-    private int GoodHit()
-    {
-        Debug.Log("LongNoteStart: Good hit");
-        return 200;
-    }
-
-    private int PerfectHit()
-    {
-        Debug.Log("LongNoteStart: Perfect hit");
-        return 300;
-    }
-
-    private int RainbowHit()
-    {
+        if (distance > 1)
+        {
+            Debug.Log("LongNoteStart: Okay hit");
+            return 100;
+        }
+        if (distance > 0.35)
+        {
+            Debug.Log("LongNoteStart: Good hit");
+            return 200;
+        }
+        if (distance > 0.05)
+        {
+            Debug.Log("LongNoteStart: Perfect hit");
+            return 300;
+        }
         Debug.Log("LongNoteStart: Marvelous hit");
         return 320;
     }
+
+    [SerializeField] private Button button;
 }

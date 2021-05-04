@@ -12,13 +12,7 @@ public class GameManager : MonoBehaviour
     public HashSet<Button> NoteButtons { get; set; } =
         new HashSet<Button>();
 
-    private int columnsNumber = 4;
-    private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
-    private double columnWidth = 2;
-
     public static GameManager Instance { get; private set; }
-
-    [SerializeField] private int score;
 
     public GameManager() => Instance = this;
 
@@ -28,11 +22,6 @@ public class GameManager : MonoBehaviour
         {
             NotesToBePressed[button] = new Queue<BaseNote>();
         }
-    }
-
-    void Update()
-    {
-
     }
 
     public void RegisterNote(BaseNote note)
@@ -68,4 +57,9 @@ public class GameManager : MonoBehaviour
             ? columnsPosition + new Vector2((float)(columnWidth * index), 0)
             : throw new ArgumentException();
     }
+
+    [SerializeField] private int score;
+    private int columnsNumber = 4;
+    private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
+    private double columnWidth = 2;
 }
