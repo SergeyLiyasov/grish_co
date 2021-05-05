@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
     {
         for (var column = 0; column < nextIndexes.Length; column++)
         {
-            if (nextIndexes[column] < Notes[column].Count && Notes[column][nextIndexes[column]].SpawnTime < Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance)
+            if (nextIndexes[column] < Notes[column].Count && Notes[column][nextIndexes[column]].SpawnTime < Conductor.Instance.SongPositionInBeats + Conductor.Instance.BeatsShownInAdvance)
             {
                 GameObject type = GetNotePrefabByType(Notes[column][nextIndexes[column]].NoteType);
 
@@ -32,17 +32,9 @@ public class Spawner : MonoBehaviour
                 currentNote.GetComponent<Note>().Column = column;
 
                 Debug.Log(nextIndexes[column]);
-                Debug.Log(Conductor.Instance.BeatNumber);
+                //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
                 nextIndexes[column]++;
             }
-        }
-        if (Conductor.Instance.SongPosition > Conductor.Instance.LastBeat + Conductor.Instance.SecPerBeat)
-        {
-            Conductor.Instance.LastBeat += Conductor.Instance.SecPerBeat;
-            Conductor.Instance.BeatNumber++;
-            //Debug.Log($"Beat number: {beatNumber}");
-            Debug.Log($"Last beat: {Conductor.Instance.LastBeat}");
-            //Debug.Log($"Offset: {Conductor.Instance.Offset}");
         }
     }
 

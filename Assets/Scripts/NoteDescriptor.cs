@@ -5,9 +5,9 @@ using UnityEngine;
 public struct NoteDescriptor
 {
     public NoteType NoteType;
-    public int SpawnTime;
+    public float SpawnTime;
 
-    public NoteDescriptor(NoteType noteType, int spawnTime)
+    public NoteDescriptor(NoteType noteType, float spawnTime)
     {
         NoteType = noteType;
         SpawnTime = spawnTime;

@@ -12,17 +12,16 @@ public class Conductor : MonoBehaviour
     public float Offset { get; set; }
     public float LastBeat { get; set; }
     public int BeatNumber { get; set; }
-    public int BeatsShownInAdvance { get; set; }
-    public float SongPositionInBeats { get; set; } // Нужна только для интерполяции
+    public float BeatsShownInAdvance { get; set; }
+    public float SongPositionInBeats { get; set; }
 
     public Conductor() => Instance = this;
 
     void Start()
     {
         LastBeat = -SecPerBeat;
-        BeatNumber = 0;
+        BeatNumber = -1;
         BeatsShownInAdvance = 2;
-        audioSource = GetComponent<AudioSource>();
         Offset = 2.435f;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
@@ -33,7 +32,9 @@ public class Conductor : MonoBehaviour
     void Update()
     {
         SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-        SongPositionInBeats = SongPosition / SecPerBeat;
+        SongPositionInBeats = SongPosition / SecPerBeat - SecPerBeat;
+        //LastBeat += SecPerBeat;
+        //BeatNumber++;
     }
 
     [SerializeField] private AudioSource audioSource;
