@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     public Vector2 GetColumnPosition(int index)
     {
         return index < columnsNumber
-            ? columnsPosition + new Vector2((float)(columnWidth * index), 0)
+            ? columnsPosition + new Vector2((float)(columnWidth * index), 6.5f)
             : throw new ArgumentException();
     }
 

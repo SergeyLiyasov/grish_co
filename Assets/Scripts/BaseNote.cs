@@ -8,6 +8,8 @@ public abstract class BaseNote : MonoBehaviour
 {
     public abstract Button Button { get; }
     public abstract int ReceiveSignal(bool activating);
+    public abstract float SpawnTime { get; set; }
+    public abstract int Column { get; set; }
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
     {

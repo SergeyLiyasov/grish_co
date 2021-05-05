@@ -5,26 +5,50 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    public List<NoteDescriptor>[] Notes { get; set; }
+
+
+    void Start()
+    {
+        Notes = new List<NoteDescriptor>[4] {
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) } };
+    }
+
     void Update()
     {
-        if (reader.Current == null)
+        for (var column = 0; column < nextIndexes.Length; column++)
         {
-            reader.MoveNext();
+            if (nextIndexes[column] < Notes[column].Count && Notes[column][nextIndexes[column]].SpawnTime < Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance)
+            {
+                GameObject type = GetNotePrefabByType(Notes[column][nextIndexes[column]].NoteType);
+
+                var position = GameManager.Instance.GetColumnPosition(column);
+
+                var currentNote = Instantiate(type, position, Quaternion.identity);
+                currentNote.GetComponent<Note>().SpawnTime = Notes[column][nextIndexes[column]].SpawnTime;
+                currentNote.GetComponent<Note>().Column = column;
+
+                Debug.Log(nextIndexes[column]);
+                Debug.Log(Conductor.Instance.BeatNumber);
+                nextIndexes[column]++;
+            }
         }
-        else if (reader.Current.Time == Conductor.Instance.SongPosition)
+        if (Conductor.Instance.SongPosition > Conductor.Instance.LastBeat + Conductor.Instance.SecPerBeat)
         {
-            GameObject type = GetNotePrefabByType();
-
-            var position = GameManager.Instance.GetColumnPosition(reader.Current.Column);
-
-            Instantiate(type, position, Quaternion.identity, scroller.transform);
-            reader.MoveNext();
+            Conductor.Instance.LastBeat += Conductor.Instance.SecPerBeat;
+            Conductor.Instance.BeatNumber++;
+            //Debug.Log($"Beat number: {beatNumber}");
+            Debug.Log($"Last beat: {Conductor.Instance.LastBeat}");
+            //Debug.Log($"Offset: {Conductor.Instance.Offset}");
         }
     }
 
-    private GameObject GetNotePrefabByType()
+    private GameObject GetNotePrefabByType(NoteType noteType)
     {
-        return reader.Current.Type switch
+        return noteType switch
         {
             NoteType.Start => startPrefab,
             NoteType.End => endPrefab,
@@ -40,4 +64,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject notePrefab;
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject endPrefab;
+
+    private int[] nextIndexes = new int[4] {0,0,0,0};
+    
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class LongNoteEnd : BaseNote
 {
     public override Button Button => start.Button;
+    public override float SpawnTime { get; set; }
+    public override int Column { get; set; }
 
     public override int ReceiveSignal(bool activating)
     {
