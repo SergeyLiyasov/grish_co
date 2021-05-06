@@ -12,10 +12,12 @@ public class Note : BaseNote
 
     void Update()
     {
-        transform.position = Vector2.Lerp(
-        new Vector2(GameManager.Instance.GetColumnPosition(Column).x, 6.5f),
-        new Vector2(GameManager.Instance.GetColumnPosition(Column).x, -2.5f),
-        (Conductor.Instance.BeatsShownInAdvance - (SpawnTime - Conductor.Instance.SongPositionInBeats)) / Conductor.Instance.BeatsShownInAdvance);
+        var columnPosX = GameManager.Instance.GetColumnPosition(Column).x;
+        transform.position = Vector3.Lerp(
+            new Vector2(columnPosX, 7.2f),
+            new Vector2(columnPosX, -5f),
+            (Conductor.Instance.SongPositionInBeats - SpawnTime) / (1 * Conductor.Instance.BeatsShownInAdvance)
+        );
     }
 
     public override int ReceiveSignal(bool activating)

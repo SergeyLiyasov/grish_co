@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        Notes = new List<NoteDescriptor>[4] {
+        Notes = new[] {
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
@@ -21,17 +21,20 @@ public class Spawner : MonoBehaviour
     {
         for (var column = 0; column < nextIndexes.Length; column++)
         {
-            if (nextIndexes[column] < Notes[column].Count && Notes[column][nextIndexes[column]].SpawnTime < Conductor.Instance.SongPositionInBeats + Conductor.Instance.BeatsShownInAdvance)
+            var noteDescriptor = Notes[column][nextIndexes[column]];
+            if (nextIndexes[column] < Notes[column].Count &&
+                noteDescriptor.SpawnTime < Conductor.Instance.SongPositionInBeats + Conductor.Instance.BeatsShownInAdvance)
             {
-                GameObject type = GetNotePrefabByType(Notes[column][nextIndexes[column]].NoteType);
+                var type = GetNotePrefabByType(noteDescriptor.NoteType);
 
                 var position = GameManager.Instance.GetColumnPosition(column);
 
-                var currentNote = Instantiate(type, position, Quaternion.identity);
-                currentNote.GetComponent<Note>().SpawnTime = Notes[column][nextIndexes[column]].SpawnTime;
-                currentNote.GetComponent<Note>().Column = column;
+                var noteObject = Instantiate(type, position, Quaternion.identity);
+                var note = noteObject.GetComponent<BaseNote>();
+                note.SpawnTime = noteDescriptor.SpawnTime;
+                note.Column = column;
 
-                Debug.Log(nextIndexes[column]);
+                Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
                 //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
                 nextIndexes[column]++;
             }
@@ -57,6 +60,6 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject endPrefab;
 
-    private int[] nextIndexes = new int[4] {0,0,0,0};
+    private int[] nextIndexes = { 0, 0, 0, 0 };
     
 }

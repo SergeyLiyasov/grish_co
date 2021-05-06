@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Scroller : MonoBehaviour
 {
-    void Update()
-    {
-        transform.position += new Vector3(0, -1.5f * Time.deltaTime);
-    }
+    //void Update()
+    //{
+    //    transform.position += new Vector3(0, -1.5f * Time.deltaTime);
+    //}
 }
