@@ -19,8 +19,8 @@ public class Metronome : MonoBehaviour
             lastBeat += Conductor.Instance.SecPerBeat;
             beatNumber++;
             //Debug.Log($"Beat number: {beatNumber}");
-            Debug.Log($"Last beat Metro: {lastBeat}");
-            //Debug.Log($"Offset: {Conductor.Instance.Offset}");
+            //Debug.Log($"Last beat Metro: {lastBeat}");
+            Debug.Log($"SongPositionInBeats: {Conductor.Instance.SongPositionInBeats}");
         }
     }
 
