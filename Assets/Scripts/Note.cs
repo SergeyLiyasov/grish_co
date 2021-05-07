@@ -10,12 +10,19 @@ public class Note : BaseNote
     public override float SpawnTime { get; set; }
     public override int Column { get; set; }
 
+    void Start()
+    {
+        startPosition = new Vector2(GameManager.Instance.GetColumnPosition(Column).x, 6.5f);
+        buttonPosition = new Vector2(GameManager.Instance.GetColumnPosition(Column).x, -2.5f);
+        outOfRangePosition = new Vector2(GameManager.Instance.GetColumnPosition(Column).x, -11.5f);
+    }
+
     void Update()
     {
         transform.position = Vector2.Lerp(
-        new Vector2(GameManager.Instance.GetColumnPosition(Column).x, 6.5f),
-        new Vector2(GameManager.Instance.GetColumnPosition(Column).x, -2.5f),
-        (Conductor.Instance.BeatsShownInAdvance - (SpawnTime - Conductor.Instance.SongPositionInBeats)) / Conductor.Instance.BeatsShownInAdvance);
+        startPosition,
+        outOfRangePosition,
+        (Conductor.Instance.BeatsShownInAdvance - (SpawnTime - Conductor.Instance.SongPositionInBeats)) / (2 * Conductor.Instance.BeatsShownInAdvance));
     }
 
     public override int ReceiveSignal(bool activating)
@@ -51,4 +58,7 @@ public class Note : BaseNote
     }
 
     [SerializeField] private Button button;
+    private Vector2 startPosition;
+    private Vector2 buttonPosition;
+    private Vector2 outOfRangePosition;
 }

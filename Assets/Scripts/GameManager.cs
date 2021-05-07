@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 200;
-
         foreach (var button in NoteButtons)
         {
             NotesToBePressed[button] = new Queue<BaseNote>();

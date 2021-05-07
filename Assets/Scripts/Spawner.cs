@@ -11,7 +11,7 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         Notes = new List<NoteDescriptor>[4] {
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8), new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20), new NoteDescriptor(NoteType.Note, 24), new NoteDescriptor(NoteType.Note, 28) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) } };
@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
     {
         for (var column = 0; column < nextIndexes.Length; column++)
         {
-            if (nextIndexes[column] < Notes[column].Count && Notes[column][nextIndexes[column]].SpawnTime < Conductor.Instance.SongPositionInBeats + Conductor.Instance.BeatsShownInAdvance)
+            if (nextIndexes[column] < Notes[column].Count && Notes[column][nextIndexes[column]].SpawnTime <= Conductor.Instance.SongPositionInBeats + Conductor.Instance.BeatsShownInAdvance)
             {
                 GameObject type = GetNotePrefabByType(Notes[column][nextIndexes[column]].NoteType);
 
@@ -31,8 +31,8 @@ public class Spawner : MonoBehaviour
                 currentNote.GetComponent<Note>().SpawnTime = Notes[column][nextIndexes[column]].SpawnTime;
                 currentNote.GetComponent<Note>().Column = column;
 
-                Debug.Log(nextIndexes[column]);
-                //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
+                //Debug.Log(nextIndexes[column]);
+                //Debug.Log(Conductor.Instance.SongPositionInBeats);
                 nextIndexes[column]++;
             }
         }

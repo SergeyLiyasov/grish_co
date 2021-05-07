@@ -12,6 +12,7 @@ public class Conductor : MonoBehaviour
     public float Offset { get; set; }
     public float LastBeat { get; set; }
     public int BeatNumber { get; set; }
+    public float TimePassedSinceLastFrame { get; set; }
     public float BeatsShownInAdvance { get; set; }
     public float SongPositionInBeats { get; set; }
 
@@ -21,7 +22,7 @@ public class Conductor : MonoBehaviour
     {
         LastBeat = -SecPerBeat;
         BeatNumber = -1;
-        BeatsShownInAdvance = 2;
+        BeatsShownInAdvance = 1.25f;
         Offset = 2.435f;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
@@ -31,12 +32,30 @@ public class Conductor : MonoBehaviour
 
     void Update()
     {
-        SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-        SongPositionInBeats = SongPosition / SecPerBeat - SecPerBeat;
-        //LastBeat += SecPerBeat;
-        //BeatNumber++;
+        if (firstSongPositionCalculation)
+        {
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
+            firstSongPositionCalculation = false;
+        }
+        else if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
+        {
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
+            //Debug.Log("Song pos on update: " + SongPosition);
+        }
+        else
+        {
+            SongPosition += Time.unscaledDeltaTime;
+            //Debug.Log(SongPosition);
+        }
+        SongPositionInBeats = SongPosition / SecPerBeat;
+        if (SongPosition > LastBeat + SecPerBeat)
+        {
+            LastBeat += SecPerBeat;
+            BeatNumber++;
+        }
     }
 
     [SerializeField] private AudioSource audioSource;
     private double deltaSongPos;
+    private bool firstSongPositionCalculation = true;
 }
