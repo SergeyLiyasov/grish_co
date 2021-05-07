@@ -13,7 +13,9 @@ public class Spawner : MonoBehaviour
         Notes = new[] {
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8),
                 new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20),
-                new NoteDescriptor(NoteType.Note, 24), new NoteDescriptor(NoteType.Note, 28) },
+                new NoteDescriptor(NoteType.Note, 24), new NoteDescriptor(NoteType.Note, 28), new NoteDescriptor(NoteType.Note, 32), new NoteDescriptor(NoteType.Note, 36), new NoteDescriptor(NoteType.Note, 40),
+                new NoteDescriptor(NoteType.Note, 44), new NoteDescriptor(NoteType.Note, 48), new NoteDescriptor(NoteType.Note, 52),
+                new NoteDescriptor(NoteType.Note, 56), new NoteDescriptor(NoteType.Note, 60) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
             new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) } };

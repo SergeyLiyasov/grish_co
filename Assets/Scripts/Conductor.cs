@@ -22,8 +22,8 @@ public class Conductor : MonoBehaviour
     {
         LastBeat = -SecPerBeat;
         BeatNumber = -1;
-        BeatsShownInAdvance = 1.25f;
-        Offset = 2.435f;
+        BeatsShownInAdvance = 2.5f;
+        Offset = 2.55f;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
         deltaSongPos = AudioSettings.dspTime;
@@ -36,16 +36,17 @@ public class Conductor : MonoBehaviour
         {
             SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
             firstSongPositionCalculation = false;
+            Debug.Log("Song pos on start: " + SongPosition);
         }
         else if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
         {
             SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-            //Debug.Log("Song pos on update: " + SongPosition);
+            Debug.Log("Song pos on update: " + SongPosition);
         }
         else
         {
             SongPosition += Time.unscaledDeltaTime;
-            //Debug.Log(SongPosition);
+            Debug.Log(SongPosition);
         }
         SongPositionInBeats = SongPosition / SecPerBeat;
         if (SongPosition > LastBeat + SecPerBeat)
