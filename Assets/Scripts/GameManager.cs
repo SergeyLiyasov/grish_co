@@ -6,11 +6,9 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-    public Dictionary<Button, Queue<BaseNote>> NotesToBePressed { get; set; } =
-        new Dictionary<Button, Queue<BaseNote>>();
+    public Queue<BaseNote>[] NotesToBePressed { get; set; }
 
-    public HashSet<Button> NoteButtons { get; set; } =
-        new HashSet<Button>();
+    public List<Button> NoteButtons { get; set; } = new List<Button>();
 
     public static GameManager Instance { get; private set; }
 
@@ -19,16 +17,16 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 200;
-
-        foreach (var button in NoteButtons)
+        NotesToBePressed = new Queue<BaseNote>[NoteButtons.Count];
+        for (int i = 0; i < NoteButtons.Count; i++)
         {
-            NotesToBePressed[button] = new Queue<BaseNote>();
+            NotesToBePressed[i] = new Queue<BaseNote>();
         }
     }
 
     public void RegisterNote(BaseNote note)
     {
-        NotesToBePressed[note.Button].Enqueue(note);
+        NotesToBePressed[note.Column].Enqueue(note);
     }
 
     public void OutdateNote(BaseNote note)
@@ -38,17 +36,18 @@ public class GameManager : MonoBehaviour
 
     public bool TryOutdateNote(BaseNote note)
     {
-        if (!NotesToBePressed.TryGetValue(note.Button, out var q) || q.Count == 0 || q.Peek() != note)
+        var q = NotesToBePressed[note.Column];
+        if (q.Count == 0 || q.Peek() != note)
             return false;
-        NotesToBePressed[note.Button].Dequeue();
+        NotesToBePressed[note.Column].Dequeue();
         return true;
     }
 
     public void ReceiveSignal(Button button, bool activating)
     {
-        if (NotesToBePressed[button].Count != 0)
+        if (NotesToBePressed[button.Column].Count != 0)
         {
-            var note = NotesToBePressed[button].Peek();
+            var note = NotesToBePressed[button.Column].Peek();
             score += note.ReceiveSignal(activating);
         }
     }
@@ -56,12 +55,12 @@ public class GameManager : MonoBehaviour
     public Vector2 GetColumnPosition(int index)
     {
         return index < columnsNumber
-            ? columnsPosition + new Vector2((float)(columnWidth * index), 6.5f)
+            ? columnsPosition + new Vector2(columnWidth * index, 7.2f)
             : throw new ArgumentException();
     }
 
     [SerializeField] private int score;
     private int columnsNumber = 4;
-    private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
-    private double columnWidth = 2;
+    private Vector2 columnsPosition = new Vector2(-2.5f, 7.2f);
+    private float columnWidth = 2;
 }

@@ -21,24 +21,32 @@ public class Spawner : MonoBehaviour
     {
         for (var column = 0; column < nextIndexes.Length; column++)
         {
+            if (nextIndexes[column] >= Notes[column].Count) continue;
             var noteDescriptor = Notes[column][nextIndexes[column]];
-            if (nextIndexes[column] < Notes[column].Count &&
-                noteDescriptor.SpawnTime < Conductor.Instance.SongPositionInBeats + Conductor.Instance.BeatsShownInAdvance)
-            {
-                var type = GetNotePrefabByType(noteDescriptor.NoteType);
+            if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
+            //var type = GetNotePrefabByType(noteDescriptor.NoteType);
 
-                var position = GameManager.Instance.GetColumnPosition(column);
+            var position = GameManager.Instance.GetColumnPosition(column);
 
-                var noteObject = Instantiate(type, position, Quaternion.identity);
-                var note = noteObject.GetComponent<BaseNote>();
-                note.SpawnTime = noteDescriptor.SpawnTime;
-                note.Column = column;
+            //var noteObject = Instantiate(type, position, Quaternion.identity, notesContainer.transform);
+            //var note = noteObject.GetComponent<BaseNote>();
+            //note.DestinationTime = noteDescriptor.DestinationTime;
+            //note.Column = column;
+            var noteObject = BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
 
-                Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
-                //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
-                nextIndexes[column]++;
-            }
+            Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
+            //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
+            nextIndexes[column]++;
         }
+    }
+
+    private GameObject BuildNote(NoteType type, float destinationTime, int column)
+    {
+        var noteObject = Instantiate(GetNotePrefabByType(type), notesContainer.transform);
+        var note = noteObject.GetComponent<BaseNote>();
+        note.DestinationTime = destinationTime;
+        note.Column = column;
+        return noteObject;
     }
 
     private GameObject GetNotePrefabByType(NoteType noteType)
@@ -54,12 +62,11 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] private INotePrefabsReader reader;
 
-    [SerializeField] private GameObject scroller;
+    [SerializeField] private GameObject notesContainer;
 
     [SerializeField] private GameObject notePrefab;
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject endPrefab;
 
     private int[] nextIndexes = { 0, 0, 0, 0 };
-    
 }

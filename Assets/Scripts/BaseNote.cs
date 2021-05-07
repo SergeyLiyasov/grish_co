@@ -7,9 +7,11 @@ using UnityEngine.UIElements;
 public abstract class BaseNote : MonoBehaviour
 {
     public abstract Button Button { get; }
-    public abstract int ReceiveSignal(bool activating);
-    public abstract float SpawnTime { get; set; }
+    public abstract float SpawnTime { get; }
+    public abstract float DestinationTime { get; set; }
     public abstract int Column { get; set; }
+
+    public abstract int ReceiveSignal(bool activating);
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
     {

@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    public double PressedTime { get; set; }
+    public double PressedTime { get; private set; }
+    public int Column => column;
 
     void Start()
     {
-        GameManager.Instance.NoteButtons.Add(this);
+        GameManager.Instance.NoteButtons.InsertWithResize(Column, this);
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -31,5 +32,6 @@ public class Button : MonoBehaviour
     [SerializeField] private KeyCode key;
     [SerializeField] private Sprite unpressedSprite;
     [SerializeField] private Sprite pressedSprite;
+    [SerializeField] private int column;
     private SpriteRenderer spriteRenderer;
 }

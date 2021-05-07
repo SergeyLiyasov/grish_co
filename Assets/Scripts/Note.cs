@@ -6,18 +6,25 @@ using UnityEngine.UIElements;
 
 public class Note : BaseNote
 {
-    public override Button Button => button;
-    public override float SpawnTime { get; set; }
+    public override Button Button => GameManager.Instance.NoteButtons[Column];
+    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
+    public override float DestinationTime { get; set; }
     public override int Column { get; set; }
 
-    void Update()
+    private void Start()
     {
-        var columnPosX = GameManager.Instance.GetColumnPosition(Column).x;
-        transform.position = Vector3.Lerp(
-            new Vector2(columnPosX, 7.2f),
-            new Vector2(columnPosX, -5f),
-            (Conductor.Instance.SongPositionInBeats - SpawnTime) / (1 * Conductor.Instance.BeatsShownInAdvance)
-        );
+        start = GameManager.Instance.GetColumnPosition(Column);
+        destination = new Vector2(start.x, -2.5f);
+    }
+
+    private void Update()
+    {
+        var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
+        if (timeDelta <= 1.5f * Conductor.Instance.BeatsShownInAdvance)
+        {
+            var velocity = (destination - start) / Conductor.Instance.BeatsShownInAdvance;
+            transform.position = start + velocity * timeDelta;
+        }
     }
 
     public override int ReceiveSignal(bool activating)
@@ -53,4 +60,6 @@ public class Note : BaseNote
     }
 
     [SerializeField] private Button button;
+    private Vector2 start;
+    private Vector2 destination;
 }

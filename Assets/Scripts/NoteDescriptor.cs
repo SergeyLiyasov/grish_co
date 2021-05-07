@@ -4,12 +4,13 @@ using UnityEngine;
 
 public struct NoteDescriptor
 {
-    public NoteType NoteType;
-    public float SpawnTime;
+    public NoteType NoteType { get; }
+    public float DestinationTime { get; }
+    public float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
 
-    public NoteDescriptor(NoteType noteType, float spawnTime)
+    public NoteDescriptor(NoteType noteType, float destinationTime)
     {
         NoteType = noteType;
-        SpawnTime = spawnTime;
+        DestinationTime = destinationTime;
     }
 }

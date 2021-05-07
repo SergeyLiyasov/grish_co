@@ -3,10 +3,12 @@ using UnityEngine;
 public class LongNoteStart : BaseNote
 {
     public override Button Button => button;
-    public override float SpawnTime { get; set; }
+    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
+    public override float DestinationTime { get; set; }
     public override int Column { get; set; }
     public int PressingScore { get; set; }
     public double? PressingTime { get; set; }
+
 
     public override int ReceiveSignal(bool activating)
     {
