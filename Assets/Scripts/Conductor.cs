@@ -22,8 +22,8 @@ public class Conductor : MonoBehaviour
     {
         LastBeat = -SecPerBeat;
         BeatNumber = -1;
-        BeatsShownInAdvance = 2.5f;
-        Offset = 2.55f;
+        BeatsShownInAdvance = 5f;
+        Offset = 0.07f;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
         deltaSongPos = AudioSettings.dspTime;
