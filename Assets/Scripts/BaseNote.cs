@@ -28,4 +28,23 @@ public abstract class BaseNote : MonoBehaviour
             GameManager.Instance.OutdateNote(this);
         }
     }
+
+    private void Start()
+    {
+        spawnPoint = GameManager.Instance.GetColumnPosition(Column);
+        destinationPoint = new Vector2(spawnPoint.x, -2.5f);
+    }
+
+    public void Move()
+    {
+        var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
+        if (timeDelta <= 1.5f * Conductor.Instance.BeatsShownInAdvance)
+        {
+            var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsShownInAdvance;
+            transform.position = spawnPoint + velocity * timeDelta;
+        }
+    }
+
+    private Vector2 spawnPoint;
+    private Vector2 destinationPoint;
 }

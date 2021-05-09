@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class LongNoteStart : BaseNote
 {
-    public override Button Button => button;
+    public override Button Button => GameManager.Instance.NoteButtons[Column];
     public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
     public override float DestinationTime { get; set; }
     public override int Column { get; set; }
     public int PressingScore { get; set; }
     public double? PressingTime { get; set; }
 
+    private void Update()
+    {
+        Move();
+    }
 
     public override int ReceiveSignal(bool activating)
     {
@@ -44,6 +48,4 @@ public class LongNoteStart : BaseNote
         Debug.Log("LongNoteStart: Marvelous hit");
         return 320;
     }
-
-    [SerializeField] private Button button;
 }

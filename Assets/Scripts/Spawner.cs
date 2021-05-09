@@ -10,15 +10,13 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        Notes = new[] {
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8),
-                new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20),
-                new NoteDescriptor(NoteType.Note, 24), new NoteDescriptor(NoteType.Note, 28), new NoteDescriptor(NoteType.Note, 32), new NoteDescriptor(NoteType.Note, 36), new NoteDescriptor(NoteType.Note, 40),
-                new NoteDescriptor(NoteType.Note, 44), new NoteDescriptor(NoteType.Note, 48), new NoteDescriptor(NoteType.Note, 52),
-                new NoteDescriptor(NoteType.Note, 56), new NoteDescriptor(NoteType.Note, 60) },
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) },
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 0), new NoteDescriptor(NoteType.Note, 4), new NoteDescriptor(NoteType.Note, 8) } };
+        Notes = new[]
+        {
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Start, 12), new NoteDescriptor(NoteType.End, 16) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20) },
+            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20) },
+        };
     }
 
     void Update()
@@ -28,17 +26,12 @@ public class Spawner : MonoBehaviour
             if (nextIndexes[column] >= Notes[column].Count) continue;
             var noteDescriptor = Notes[column][nextIndexes[column]];
             if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
-            //var type = GetNotePrefabByType(noteDescriptor.NoteType);
 
-            var position = GameManager.Instance.GetColumnPosition(column);
+            //var position = GameManager.Instance.GetColumnPosition(column);
+            //var noteObject = 
+            BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
 
-            //var noteObject = Instantiate(type, position, Quaternion.identity, notesContainer.transform);
-            //var note = noteObject.GetComponent<BaseNote>();
-            //note.DestinationTime = noteDescriptor.DestinationTime;
-            //note.Column = column;
-            var noteObject = BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
-
-            Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
+            //Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
             //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
             nextIndexes[column]++;
         }
@@ -48,8 +41,11 @@ public class Spawner : MonoBehaviour
     {
         var noteObject = Instantiate(GetNotePrefabByType(type), notesContainer.transform);
         var note = noteObject.GetComponent<BaseNote>();
+        if (note is LongNoteEnd end)
+            end.Start = lastNote[column] as LongNoteStart;
         note.DestinationTime = destinationTime;
         note.Column = column;
+        lastNote[column] = note;
         return noteObject;
     }
 
@@ -73,4 +69,5 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject endPrefab;
 
     private int[] nextIndexes = { 0, 0, 0, 0 };
+    private BaseNote[] lastNote = { null, null, null, null };
 }

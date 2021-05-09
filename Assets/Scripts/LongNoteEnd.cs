@@ -8,6 +8,12 @@ public class LongNoteEnd : BaseNote
     public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
     public override float DestinationTime { get; set; }
     public override int Column { get => start.Column; set => start.Column = value; }
+    public LongNoteStart Start { get => start; set => start = value; }
+
+    private void Update()
+    {
+        Move();
+    }
 
     public override int ReceiveSignal(bool activating)
     {

@@ -20,7 +20,7 @@ public class Metronome : MonoBehaviour
             beatNumber++;
             //Debug.Log($"Beat number: {beatNumber}");
             //Debug.Log($"Last beat Metro: {lastBeat}");
-            Debug.Log($"SongPositionInBeats: {Conductor.Instance.SongPositionInBeats}");
+            //Debug.Log($"SongPositionInBeats: {Conductor.Instance.SongPositionInBeats}");
         }
     }
 

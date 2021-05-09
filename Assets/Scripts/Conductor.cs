@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Conductor : MonoBehaviour
 {
-    public float SongPosition { get; private set; }
     public static Conductor Instance { get; private set; }
+    public float SongPosition { get; private set; }
     public float Bpm { get; set; }
     public float SecPerBeat { get; set; }
     public float MapOffset { get; set; }
@@ -28,26 +28,21 @@ public class Conductor : MonoBehaviour
         SecPerBeat = 60 / Bpm;
         deltaSongPos = AudioSettings.dspTime;
         audioSource.Play();
+        SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
+        Debug.Log("Song pos on start: " + SongPosition);
     }
 
     void Update()
     {
-        if (firstSongPositionCalculation)
+        if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
         {
             SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-            firstSongPositionCalculation = false;
-            Debug.Log("Song pos on start: " + SongPosition);
-        }
-        else if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
-        {
-            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-            Debug.Log("Song pos on update: " + SongPosition);
         }
         else
         {
             SongPosition += Time.unscaledDeltaTime;
-            Debug.Log(SongPosition);
         }
+        //Debug.Log("Song pos on update: " + SongPosition);
         SongPositionInBeats = SongPosition / SecPerBeat;
         if (SongPosition > LastBeat + SecPerBeat)
         {
@@ -58,5 +53,4 @@ public class Conductor : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;
     private double deltaSongPos;
-    private bool firstSongPositionCalculation = true;
 }

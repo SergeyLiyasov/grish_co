@@ -11,20 +11,9 @@ public class Note : BaseNote
     public override float DestinationTime { get; set; }
     public override int Column { get; set; }
 
-    private void Start()
-    {
-        start = GameManager.Instance.GetColumnPosition(Column);
-        destination = new Vector2(start.x, -2.5f);
-    }
-
     private void Update()
     {
-        var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
-        if (timeDelta <= 1.5f * Conductor.Instance.BeatsShownInAdvance)
-        {
-            var velocity = (destination - start) / Conductor.Instance.BeatsShownInAdvance;
-            transform.position = start + velocity * timeDelta;
-        }
+        Move();
     }
 
     public override int ReceiveSignal(bool activating)
@@ -60,6 +49,4 @@ public class Note : BaseNote
     }
 
     [SerializeField] private Button button;
-    private Vector2 start;
-    private Vector2 destination;
 }
