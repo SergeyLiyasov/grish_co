@@ -10,30 +10,21 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        Notes = new[]
-        {
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20) },
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Start, 12), new NoteDescriptor(NoteType.End, 16) },
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20) },
-            new List<NoteDescriptor> { new NoteDescriptor(NoteType.Note, 12), new NoteDescriptor(NoteType.Note, 16), new NoteDescriptor(NoteType.Note, 20) },
-        };
+        reader = new NoteReader();
     }
 
     void Update()
     {
-        for (var column = 0; column < nextIndexes.Length; column++)
+        for (var column = 0; column < reader.NoteQueues.Length; column++)
         {
-            if (nextIndexes[column] >= Notes[column].Count) continue;
-            var noteDescriptor = Notes[column][nextIndexes[column]];
+            if (reader.NoteQueues[column].Count == 0) continue;
+            var noteDescriptor = reader.NoteQueues[column].Peek();
             if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
-
-            //var position = GameManager.Instance.GetColumnPosition(column);
-            //var noteObject = 
+            reader.NoteQueues[column].Dequeue();
             BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
 
             //Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
             //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
-            nextIndexes[column]++;
         }
     }
 
@@ -42,10 +33,10 @@ public class Spawner : MonoBehaviour
         var noteObject = Instantiate(GetNotePrefabByType(type), notesContainer.transform);
         var note = noteObject.GetComponent<BaseNote>();
         if (note is LongNoteEnd end)
-            end.Start = lastNote[column] as LongNoteStart;
+            end.Start = lastNotes[column] as LongNoteStart;
         note.DestinationTime = destinationTime;
         note.Column = column;
-        lastNote[column] = note;
+        lastNotes[column] = note;
         return noteObject;
     }
 
@@ -60,14 +51,12 @@ public class Spawner : MonoBehaviour
         };
     }
 
-    [SerializeField] private INotePrefabsReader reader;
-
     [SerializeField] private GameObject notesContainer;
 
     [SerializeField] private GameObject notePrefab;
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject endPrefab;
 
-    private int[] nextIndexes = { 0, 0, 0, 0 };
-    private BaseNote[] lastNote = { null, null, null, null };
+    private NoteReader reader;
+    private BaseNote[] lastNotes = { null, null, null, null };
 }
