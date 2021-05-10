@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 3000;
         NotesToBePressed = new Queue<BaseNote>[NoteButtons.Count];
         for (int i = 0; i < NoteButtons.Count; i++)
         {
