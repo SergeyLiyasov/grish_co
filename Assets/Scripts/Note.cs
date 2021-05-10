@@ -48,5 +48,7 @@ public class Note : BaseNote
         return 320;
     }
 
+
+
     [SerializeField] private Button button;
 }
