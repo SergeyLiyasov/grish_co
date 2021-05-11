@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public abstract class BaseNote : MonoBehaviour
 {
+    public Sprite Sprite { set => GetComponent<SpriteRenderer>().sprite = value; }
     public abstract Button Button { get; }
     public abstract float SpawnTime { get; }
     public abstract float DestinationTime { get; set; }

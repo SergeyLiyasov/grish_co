@@ -1407,6 +1407,10 @@ MonoBehaviour:
     type: 3}
   endPrefab: {fileID: 3404443763824415698, guid: eb624d2db7fc66b4785449da009c1f1e,
     type: 3}
+  leftSprite: {fileID: 21300000, guid: a6b7dc13d55cd754fb4acdccf57c35e0, type: 3}
+  downSprite: {fileID: 21300000, guid: c2c7f95cce85e5349b61282f2d2fe000, type: 3}
+  upSprite: {fileID: 21300000, guid: 6915adf7a10ed9e44a0e00045ed24577, type: 3}
+  rightSprite: {fileID: 21300000, guid: 2a63707eed97e6840bc9d4b8600f665d, type: 3}
 --- !u!4 &1570215980
 Transform:
   m_ObjectHideFlags: 0

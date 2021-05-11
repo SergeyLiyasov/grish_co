@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
             scoreDisplayer.text = $"Score: {value}";
         }
     }
+
     private int _score;
     private int columnsNumber = 4;
     private Vector2 columnsPosition = new Vector2(-2.5f, 7.2f);

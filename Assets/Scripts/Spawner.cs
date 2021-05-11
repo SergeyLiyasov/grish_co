@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        reader = new NoteReader();
+        reader = new NoteReader("Assets/Descriptors/1.txt");
     }
 
     void Update()
@@ -36,6 +36,7 @@ public class Spawner : MonoBehaviour
             end.Start = lastNotes[column] as LongNoteStart;
         note.DestinationTime = destinationTime;
         note.Column = column;
+        note.Sprite = GetSpriteByColumnNumber(column);
         lastNotes[column] = note;
         return noteObject;
     }
@@ -51,11 +52,22 @@ public class Spawner : MonoBehaviour
         };
     }
 
+    private Sprite GetSpriteByColumnNumber(int column)
+    {
+        return new[] { leftSprite, downSprite, upSprite, rightSprite }[column];
+    }
+
     [SerializeField] private GameObject notesContainer;
 
     [SerializeField] private GameObject notePrefab;
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject endPrefab;
+
+    [SerializeField] private Sprite leftSprite;
+    [SerializeField] private Sprite downSprite;
+    [SerializeField] private Sprite upSprite;
+    [SerializeField] private Sprite rightSprite;
+
 
     private NoteReader reader;
     private BaseNote[] lastNotes = { null, null, null, null };
