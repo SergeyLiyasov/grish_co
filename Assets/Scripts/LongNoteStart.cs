@@ -32,20 +32,20 @@ public class LongNoteStart : BaseNote
     {
         if (distance > 1)
         {
-            Debug.Log("LongNoteStart: Okay hit");
+            GameManager.Instance.DisplayHitComment("LStart: Okay");
             return 100;
         }
         if (distance > 0.35)
         {
-            Debug.Log("LongNoteStart: Good hit");
+            GameManager.Instance.DisplayHitComment("LStart: Good");
             return 200;
         }
         if (distance > 0.05)
         {
-            Debug.Log("LongNoteStart: Perfect hit");
+            GameManager.Instance.DisplayHitComment("LStart: Perfect");
             return 300;
         }
-        Debug.Log("LongNoteStart: Marvelous hit");
+        GameManager.Instance.DisplayHitComment("LStart: Marvelous");
         return 320;
     }
 }

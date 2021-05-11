@@ -32,20 +32,20 @@ public class LongNoteEnd : BaseNote
     {
         if (distance > 1)
         {
-            Debug.Log("LongNoteEnd: Okay hit");
+            GameManager.Instance.DisplayHitComment("LEnd: Okay");
             return 100;
         }
         if (distance > 0.35)
         {
-            Debug.Log("LongNoteEnd: Good hit");
+            GameManager.Instance.DisplayHitComment("LEnd: Good");
             return 200;
         }
         if (distance > 0.05)
         {
-            Debug.Log("LongNoteEnd: Perfect hit");
+            GameManager.Instance.DisplayHitComment("LEnd: Perfect");
             return 300;
         }
-        Debug.Log("LongNoteEnd: Marvelous hit");
+        GameManager.Instance.DisplayHitComment("LEnd: Marvelous");
         return 320;
     }
 

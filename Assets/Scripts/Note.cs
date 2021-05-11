@@ -31,20 +31,20 @@ public class Note : BaseNote
     {
         if (distance > 1)
         {
-            Debug.Log("Okay hit");
+            GameManager.Instance.DisplayHitComment("Okay");
             return 100;
         }
         if (distance > 0.35)
         {
-            Debug.Log("Good hit");
+            GameManager.Instance.DisplayHitComment("Good");
             return 200;
         }
         if (distance > 0.05)
         {
-            Debug.Log("Perfect hit");
+            GameManager.Instance.DisplayHitComment("Perfect");
             return 300;
         }
-        Debug.Log("Marvelous hit");
+        GameManager.Instance.DisplayHitComment("Marvelous");
         return 320;
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
@@ -59,7 +60,21 @@ public class GameManager : MonoBehaviour
             : throw new ArgumentException();
     }
 
-    [SerializeField] private int score;
+    public void DisplayHitComment(string str) => hitCommentDisplayer.text = $"Last hit: {str}";
+
+    [SerializeField] private Text scoreDisplayer;
+    [SerializeField] private Text hitCommentDisplayer;
+
+    private int score
+    {
+        get => _score;
+        set
+        {
+            _score = value;
+            scoreDisplayer.text = $"Score: {value}";
+        }
+    }
+    private int _score;
     private int columnsNumber = 4;
     private Vector2 columnsPosition = new Vector2(-2.5f, 7.2f);
     private float columnWidth = 2;
