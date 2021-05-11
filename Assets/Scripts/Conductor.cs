@@ -6,10 +6,10 @@ public class Conductor : MonoBehaviour
 {
     public static Conductor Instance { get; private set; }
     public float SongPosition { get; private set; }
-    public float Bpm { get; set; }
+    [SerializeField] public float Bpm { get; set; }
     public float SecPerBeat { get; set; }
     public float MapOffset { get; set; }
-    public float Offset { get; set; }
+    [SerializeField] public float Offset { get; set; }
     public float LastBeat { get; set; }
     public int BeatNumber { get; set; }
     public float TimePassedSinceLastFrame { get; set; }
@@ -22,21 +22,28 @@ public class Conductor : MonoBehaviour
     {
         LastBeat = -SecPerBeat;
         BeatNumber = -1;
-        BeatsShownInAdvance = 5f;
-        Offset = 0.07f;
+        BeatsShownInAdvance = 2.5f;
+        globalOffset = 0.1f;
+        Offset = 2.435f + globalOffset;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
-        deltaSongPos = AudioSettings.dspTime;
-        audioSource.Play();
-        SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-        Debug.Log("Song pos on start: " + SongPosition);
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
+        if (firstTimeCalculation)
+        {
+            deltaSongPos = (float)AudioSettings.dspTime;
+            audioSource.Play();
+            Debug.Log("Song pos on start: " + deltaSongPos);
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
+            firstTimeCalculation = false;
+        }
+        else if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
         {
             SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
+            //Debug.Log("Song pos on update: " + SongPositionInBeats);
         }
         else
         {
@@ -51,6 +58,10 @@ public class Conductor : MonoBehaviour
         }
     }
 
+
     [SerializeField] private AudioSource audioSource;
-    private double deltaSongPos;
+    private float deltaSongPos;
+    private float globalOffset;
+    private bool firstTimeCalculation = true;
+    private GameObject Sound;
 }
