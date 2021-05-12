@@ -14,9 +14,9 @@ public class Metronome : MonoBehaviour
     {
         if (Conductor.Instance.SongPosition >= lastBeat)
         {
-            if (beatNumber % 4 == 0)
+            if (beatNumber % 2 == 0)
             {
-                //audioSource.Play();
+                audioSource.Play();
                 Debug.Log($"time: {Conductor.Instance.SongPosition}");
                 
                 StartCoroutine(Flash());

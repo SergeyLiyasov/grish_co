@@ -3,15 +3,17 @@ using UnityEngine;
 public class LongNoteStart : BaseNote
 {
     public override Button Button => GameManager.Instance.NoteButtons[Column];
-    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
+    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
     public override float DestinationTime { get; set; }
     public override int Column { get; set; }
     public int PressingScore { get; set; }
     public double? PressingTime { get; set; }
+    public LongNoteTail Tail { get; set; }
 
     private void Update()
     {
         Move();
+        Tail.transform.position = transform.position;
     }
 
     public override int ReceiveSignal(bool activating)
@@ -48,4 +50,5 @@ public class LongNoteStart : BaseNote
         GameManager.Instance.DisplayHitComment("LStart: Marvelous");
         return 320;
     }
+
 }

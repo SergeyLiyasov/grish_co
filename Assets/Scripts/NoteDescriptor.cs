@@ -6,7 +6,7 @@ public struct NoteDescriptor
 {
     public NoteType NoteType { get; }
     public float DestinationTime { get; }
-    public float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
+    public float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
 
     public NoteDescriptor(NoteType noteType, float destinationTime)
     {

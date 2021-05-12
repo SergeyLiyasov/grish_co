@@ -32,13 +32,18 @@ public class Spawner : MonoBehaviour
     {
         var noteObject = Instantiate(GetNotePrefabByType(type), notesContainer.transform);
         var note = noteObject.GetComponent<BaseNote>();
+        if (note is LongNoteStart start)
+        {
+            note = AddLongNoteTail(start, destinationTime, column);
+            Debug.Log(start.Tail.LengthInBeats);
+        }
         if (note is LongNoteEnd end)
             end.Start = lastNotes[column] as LongNoteStart;
         note.DestinationTime = destinationTime;
         note.Column = column;
         note.Sprite = GetSpriteByColumnNumber(column);
         lastNotes[column] = note;
-        return noteObject;
+        return noteObject;     
     }
 
     private GameObject GetNotePrefabByType(NoteType noteType)
@@ -57,16 +62,30 @@ public class Spawner : MonoBehaviour
         return new[] { leftSprite, downSprite, upSprite, rightSprite }[column];
     }
 
+    private LongNoteStart AddLongNoteTail(LongNoteStart start, float destinationTime, int column)
+    {
+        var longNoteEndSpawn = reader.NoteQueues[column].Peek().SpawnTime;
+        var tailObject = Instantiate(tailPrefab);
+        start.Tail = tailObject.GetComponent<LongNoteTail>();
+        start.Tail.Column = column;
+        start.Tail.DestinationTime = destinationTime;
+        start.Tail.LengthInBeats = start.Tail.SpawnTime - longNoteEndSpawn;
+        return start;
+    }
+
     [SerializeField] private GameObject notesContainer;
 
     [SerializeField] private GameObject notePrefab;
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject endPrefab;
+    [SerializeField] private GameObject tailPrefab;
 
     [SerializeField] private Sprite leftSprite;
     [SerializeField] private Sprite downSprite;
     [SerializeField] private Sprite upSprite;
     [SerializeField] private Sprite rightSprite;
+    [SerializeField] private Sprite tailSprite;
+
 
 
     private NoteReader reader;

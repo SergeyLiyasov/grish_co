@@ -39,11 +39,8 @@ public abstract class BaseNote : MonoBehaviour
     public void Move()
     {
         var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
-        if (timeDelta <= 1.5f * Conductor.Instance.BeatsShownInAdvance)
-        {
-            var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsShownInAdvance;
-            transform.position = spawnPoint + velocity * timeDelta;
-        }
+        var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsFromSpawnToDestination;
+        transform.position = spawnPoint + velocity * timeDelta;
     }
 
     private Vector2 spawnPoint;

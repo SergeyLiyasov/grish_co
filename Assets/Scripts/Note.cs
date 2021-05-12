@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class Note : BaseNote
 {
     public override Button Button => GameManager.Instance.NoteButtons[Column];
-    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
+    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
     public override float DestinationTime { get; set; }
     public override int Column { get; set; }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -56,7 +57,7 @@ public class GameManager : MonoBehaviour
     public Vector2 GetColumnPosition(int index)
     {
         return index < columnsNumber
-            ? columnsPosition + new Vector2(columnWidth * index, 7.2f)
+            ? columnsPosition + new Vector2(columnWidth * index, 9f)
             : throw new ArgumentException();
     }
 
@@ -77,6 +78,6 @@ public class GameManager : MonoBehaviour
 
     private int _score;
     private int columnsNumber = 4;
-    private Vector2 columnsPosition = new Vector2(-2.5f, 7.2f);
+    private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
     private float columnWidth = 2;
 }

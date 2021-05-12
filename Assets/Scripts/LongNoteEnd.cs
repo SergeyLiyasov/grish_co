@@ -5,7 +5,7 @@ using UnityEngine;
 public class LongNoteEnd : BaseNote
 {
     public override Button Button => start.Button;
-    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsShownInAdvance;
+    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
     public override float DestinationTime { get; set; }
     public override int Column { get => start.Column; set => start.Column = value; }
     public LongNoteStart Start { get => start; set => start = value; }
