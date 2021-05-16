@@ -6,21 +6,24 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public List<NoteDescriptor>[] Notes { get; set; }
+    public NoteReader Reader { get; set; }
+    public string text = "Assets/Descriptors/1.txt";
 
 
     void Start()
     {
-        reader = new NoteReader("Assets/Descriptors/1.txt");
+        Reader = new NoteReader(GameManager.PathToDifficulty);
+        Debug.Log(GameManager.PathToDifficulty);
     }
 
     void Update()
     {
-        for (var column = 0; column < reader.NoteQueues.Length; column++)
+        for (var column = 0; column < Reader.NoteQueues.Length; column++)
         {
-            if (reader.NoteQueues[column].Count == 0) continue;
-            var noteDescriptor = reader.NoteQueues[column].Peek();
+            if (Reader.NoteQueues[column].Count == 0) continue;
+            var noteDescriptor = Reader.NoteQueues[column].Peek();
             if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
-            reader.NoteQueues[column].Dequeue();
+            Reader.NoteQueues[column].Dequeue();
             BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
 
             //Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
@@ -64,7 +67,7 @@ public class Spawner : MonoBehaviour
 
     private LongNoteStart AddLongNoteTail(LongNoteStart start, float destinationTime, int column)
     {
-        var longNoteEndSpawn = reader.NoteQueues[column].Peek().SpawnTime;
+        var longNoteEndSpawn = Reader.NoteQueues[column].Peek().SpawnTime;
         var tailObject = Instantiate(tailPrefab);
         start.Tail = tailObject.GetComponent<LongNoteTail>();
         start.Tail.Column = column;
@@ -88,6 +91,5 @@ public class Spawner : MonoBehaviour
 
 
 
-    private NoteReader reader;
     private BaseNote[] lastNotes = { null, null, null, null };
 }

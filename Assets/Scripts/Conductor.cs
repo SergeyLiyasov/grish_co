@@ -15,7 +15,7 @@ public class Conductor : MonoBehaviour
     public float BeatsShownInAdvance { get; set; }
     public double SixteenthNoteSize { get; private set; }
     public AudioSource AudioSource;
-
+    public static AudioClip Music { get; set; }
     public Conductor() => Instance = this;
 
     void Start()
@@ -27,28 +27,29 @@ public class Conductor : MonoBehaviour
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
         AudioSource = GetComponent<AudioSource>();
+        AudioSource.clip = Music;
     }
 
     void Update()
     {
         if (firstTimeCalculation)
         {
-            //deltaSongPos = (float)AudioSettings.dspTime;
+            deltaSongPos = (float)AudioSettings.dspTime;
             AudioSource.Play();
-            Debug.Log("Song pos on start: " + deltaSongPos);
-            SongPosition = (float)((float)(AudioSource.timeSamples) / AudioSettings.outputSampleRate - Offset);
+            Debug.Log("Song pos on start: " + Offset);
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
             firstTimeCalculation = false;
         }
-        else if ((float)((float)(AudioSource.timeSamples) / AudioSettings.outputSampleRate - Offset) > SongPosition)
+        else if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
         {
-            SongPosition = (float)((float)(AudioSource.timeSamples) / AudioSettings.outputSampleRate - Offset);
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
             //Debug.Log("Song pos on update: " + SongPositionInBeats);
         }
         else
         {
             SongPosition += Time.unscaledDeltaTime;
         }
-        //Debug.Log("Song pos on update: " + SongPosition);
+        Debug.Log("Song pos on update: " + SongPosition);
         SongPositionInBeats = SongPosition / SecPerBeat;
     }
 
