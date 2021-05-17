@@ -6,7 +6,18 @@ using UnityEngine.UIElements;
 
 public abstract class BaseNote : MonoBehaviour
 {
-    public Sprite Sprite { set => GetComponent<SpriteRenderer>().sprite = value; }
+    public SpriteRenderer SpriteRenderer
+    {
+        get
+        {
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponent<SpriteRenderer>();
+            return spriteRenderer;
+        }
+    }
+
+    public Vector2 Velocity => (destinationPoint - spawnPoint) / Conductor.Instance.BeatsFromSpawnToDestination;
+
     public abstract Button Button { get; }
     public abstract float SpawnTime { get; }
     public abstract float DestinationTime { get; set; }
@@ -14,23 +25,27 @@ public abstract class BaseNote : MonoBehaviour
 
     public abstract int ReceiveSignal(bool activating);
 
-    private void OnTriggerEnter2D(Collider2D otherCollider)
+    public void OnTriggerEnter2D(Collider2D otherCollider)
     {
-        if (otherCollider.tag == "Activator")
+        if (otherCollider.CompareTag("ButtonsInteractionCollider"))
         {
             GameManager.Instance.RegisterNote(this);
         }
+        else if (otherCollider.CompareTag("NotesDeactivatorCollider"))
+        {
+            gameObject.SetActive(false);
+        }
     }
 
-    private void OnTriggerExit2D(Collider2D otherCollider)
+    public void OnTriggerExit2D(Collider2D otherCollider)
     {
-        if (otherCollider.tag == "Activator")
+        if (otherCollider.CompareTag("ButtonsInteractionCollider"))
         {
             GameManager.Instance.OutdateNote(this);
         }
     }
 
-    private void Start()
+    public void Start()
     {
         spawnPoint = GameManager.Instance.GetColumnPosition(Column);
         destinationPoint = new Vector2(spawnPoint.x, -2.5f);
@@ -39,10 +54,10 @@ public abstract class BaseNote : MonoBehaviour
     public void Move()
     {
         var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
-        var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsFromSpawnToDestination;
-        transform.position = spawnPoint + velocity * timeDelta;
+        transform.position = spawnPoint + Velocity * timeDelta;
     }
 
+    private SpriteRenderer spriteRenderer;
     private Vector2 spawnPoint;
     private Vector2 destinationPoint;
 }

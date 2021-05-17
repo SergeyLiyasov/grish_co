@@ -37,7 +37,7 @@ public class NoteReader
 
             var descriptor = new NoteDescriptor(
                 GetNoteTypeByString(match.Groups["type"].Value),
-                float.Parse(match.Groups["destTime"].Value)
+                float.Parse(match.Groups["destTime"].Value, System.Globalization.CultureInfo.InvariantCulture)
                 );
 
             var column = int.Parse(match.Groups["column"].Value);
@@ -50,7 +50,7 @@ public class NoteReader
     {
         return str switch
         {
-            "start" => NoteType.Start,
+            "beginning" => NoteType.Beginning,
             "end" => NoteType.End,
             "note" => NoteType.Note,
             _ => throw new ArgumentException()
@@ -58,5 +58,5 @@ public class NoteReader
     }
 
     private string path;
-    private string pattern = @"\s*(?<type>note|start|end)\s+(?<column>\d+)\s+(?<destTime>\d+)[\s.]*";
+    private string pattern = @"\s*(?<type>note|beginning|end)\s+(?<column>\d+)\s+(?<destTime>[\d.]+)\s*";
 }

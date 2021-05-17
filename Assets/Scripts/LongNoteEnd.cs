@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class LongNoteEnd : BaseNote
 {
-    public override Button Button => start.Button;
+    public override Button Button => Beginning.Button;
     public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
     public override float DestinationTime { get; set; }
-    public override int Column { get => start.Column; set => start.Column = value; }
-    public LongNoteStart Start { get => start; set => start = value; }
+    public override int Column { get => Beginning.Column; set => Beginning.Column = value; }
+    public LongNoteBeginning Beginning { get; set; }
+
+    new private void Start()
+    {
+        base.Start();
+        Beginning.ShouldSpawnTails = false;
+    }
 
     private void Update()
     {
@@ -17,15 +23,18 @@ public class LongNoteEnd : BaseNote
 
     public override int ReceiveSignal(bool activating)
     {
-        if (activating || !start.PressingTime.HasValue || Button.PressedTime > start.PressingTime) return 0;
+        if (activating ||
+            !Beginning.PressingTime.HasValue ||
+            Button.PressingTime > Beginning.PressingTime)
+            return 0;
 
         var buttonPosition = Button.GetComponent<Transform>().position.y;
         var distance = Mathf.Abs(transform.position.y - buttonPosition);
 
-        int endPressingScore = GetPressingScore(distance);
+        var endPressingScore = GetPressingScore(distance);
 
         gameObject.SetActive(false);
-        return (start.PressingScore + endPressingScore) / 2;
+        return (Beginning.PressingScore + endPressingScore) / 2;
     }
 
     private int GetPressingScore(float distance)
@@ -48,6 +57,4 @@ public class LongNoteEnd : BaseNote
         GameManager.Instance.DisplayHitComment("LEnd: Marvelous");
         return 320;
     }
-
-    [SerializeField] private LongNoteStart start;
 }

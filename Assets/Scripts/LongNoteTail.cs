@@ -2,30 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LongNoteTail : MonoBehaviour
+public class LongNoteTail : BaseNote
 {
-    public Sprite Sprite { set => GetComponent<SpriteRenderer>().sprite = value; }
-    public float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
-    public float DestinationTime { get; set; }
-    public int Column { get; set; }
+    public static float Scale => 0.8f;
     public float LengthInBeats { get; set; }
+    public override Button Button => Beginning.Button;
+    public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
+    public override float DestinationTime { get; set; }
+    public override int Column { get => Beginning.Column; set => Beginning.Column = value; }
+    public LongNoteBeginning Beginning { get; set; }
 
-    void Start()
+    new public void Start()
     {
-        spawnPoint = GameManager.Instance.GetColumnPosition(Column);
-        destinationPoint = new Vector2(spawnPoint.x, -2.5f);
+        base.Start();
+        transform.localScale = new Vector2(transform.localScale.x, Scale);
     }
 
     void Update()
     {
         Move();
+        if (inCollider &&
+            Beginning.PressingTime.HasValue &&
+            Button.ReleasingTime < Beginning.PressingTime)
+        {
+            SpriteRenderer.sortingLayerName = "Note tails";
+            SpriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+        }
     }
-    public void Move()
+    //public void Move()
+    //{
+    //    var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
+    //    var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsFromSpawnToDestination;
+    //    transform.position = spawnPoint + velocity * timeDelta;
+    //}
+
+    public override int ReceiveSignal(bool activating) => 0;
+
+    new public void OnTriggerEnter2D(Collider2D otherCollider)
     {
-        var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
-        var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsFromSpawnToDestination;
-        transform.position = spawnPoint + velocity * timeDelta;
+        if (otherCollider.CompareTag("ButtonsInteractionCollider"))
+            inCollider = true;
     }
-    private Vector2 spawnPoint;
-    private Vector2 destinationPoint;
+    new public void OnTriggerExit2D(Collider2D otherCollider)
+    {
+        if (otherCollider.CompareTag("ButtonsInteractionCollider"))
+            inCollider = false;
+    }
+
+    private bool inCollider;
+    //gameObject.SetActive(false);
+    //private Vector2 spawnPoint;
+    //private Vector2 destinationPoint;
 }

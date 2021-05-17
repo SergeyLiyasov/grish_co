@@ -1,6 +1,6 @@
 ﻿public enum NoteType
 {
     Note,
-    Start,
+    Beginning,
     End
 }

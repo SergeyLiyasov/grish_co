@@ -38,8 +38,8 @@ public class Metronome : MonoBehaviour
 
     [SerializeField] private Sprite unpressedSprite;
     [SerializeField] private Sprite pressedSprite;
+    [SerializeField] private AudioSource audioSource;
     private SpriteRenderer spriteRenderer;
     private float lastBeat;
     private int beatNumber;
-    [SerializeField] private AudioSource audioSource;
 }

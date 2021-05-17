@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class LongNoteStart : BaseNote
+public class LongNoteBeginning : BaseNote
 {
     public override Button Button => GameManager.Instance.NoteButtons[Column];
     public override float SpawnTime => DestinationTime - Conductor.Instance.BeatsFromSpawnToDestination;
@@ -8,12 +11,28 @@ public class LongNoteStart : BaseNote
     public override int Column { get; set; }
     public int PressingScore { get; set; }
     public double? PressingTime { get; set; }
-    public LongNoteTail Tail { get; set; }
+    public bool ShouldSpawnTails { get; set; } = true;
+
+    new public void Start()
+    {
+        base.Start();
+        StartCoroutine(SpawnTail());
+    }
 
     private void Update()
     {
         Move();
-        Tail.transform.position = transform.position;
+    }
+
+    private IEnumerator SpawnTail()
+    {
+        while (ShouldSpawnTails)
+        {
+            Spawner.Instance.BuildLongNoteTail(this,
+                Conductor.Instance.SongPositionInBeats +
+                Conductor.Instance.BeatsFromSpawnToDestination);
+            yield return new WaitForSeconds(5f / 9 * LongNoteTail.Scale * Conductor.Instance.SecPerBeat / -Velocity.y);
+        }
     }
 
     public override int ReceiveSignal(bool activating)
@@ -24,7 +43,7 @@ public class LongNoteStart : BaseNote
         var distance = Mathf.Abs(transform.position.y - buttonPosition);
 
         PressingScore = GetPressingScore(distance);
-        PressingTime = Time.timeAsDouble;
+        PressingTime = Conductor.Instance.SongPosition;
 
         gameObject.SetActive(false);
         return 0;
@@ -50,5 +69,4 @@ public class LongNoteStart : BaseNote
         GameManager.Instance.DisplayHitComment("LStart: Marvelous");
         return 320;
     }
-
 }

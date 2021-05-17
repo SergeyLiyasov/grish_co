@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    public double PressedTime { get; private set; }
+    public double PressingTime { get; private set; }
+    public double ReleasingTime { get; private set; }
     public int Column => column;
 
     void Start()
@@ -19,12 +20,13 @@ public class Button : MonoBehaviour
         if (Input.GetKeyDown(key))
         {
             GameManager.Instance.ReceiveSignal(this, true);
-            PressedTime = Time.timeAsDouble;
+            PressingTime = Conductor.Instance.SongPosition;
             spriteRenderer.sprite = pressedSprite;
         }
         else if (Input.GetKeyUp(key))
         {
             GameManager.Instance.ReceiveSignal(this, false);
+            ReleasingTime = Conductor.Instance.SongPosition;
             spriteRenderer.sprite = unpressedSprite;
         }
     }

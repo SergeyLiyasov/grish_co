@@ -6,10 +6,11 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public List<NoteDescriptor>[] Notes { get; set; }
-
+    public static Spawner Instance { get; private set; }
 
     void Start()
     {
+        Instance = this;
         reader = new NoteReader("Assets/Descriptors/1.txt");
     }
 
@@ -32,16 +33,16 @@ public class Spawner : MonoBehaviour
     {
         var noteObject = Instantiate(GetNotePrefabByType(type), notesContainer.transform);
         var note = noteObject.GetComponent<BaseNote>();
-        if (note is LongNoteStart start)
-        {
-            note = AddLongNoteTail(start, destinationTime, column);
-            Debug.Log(start.Tail.LengthInBeats);
-        }
+        //if (note is LongNoteStart start)
+        //{
+        //    SpawnLongNoteTail(start, destinationTime, column);
+        //    Debug.Log(start.Tail.LengthInBeats);
+        //}
         if (note is LongNoteEnd end)
-            end.Start = lastNotes[column] as LongNoteStart;
+            end.Beginning = lastNotes[column] as LongNoteBeginning;
         note.DestinationTime = destinationTime;
         note.Column = column;
-        note.Sprite = GetSpriteByColumnNumber(column);
+        note.SpriteRenderer.sprite = GetSpriteByColumnNumber(column);
         lastNotes[column] = note;
         return noteObject;     
     }
@@ -50,7 +51,7 @@ public class Spawner : MonoBehaviour
     {
         return noteType switch
         {
-            NoteType.Start => startPrefab,
+            NoteType.Beginning => beginningPrefab,
             NoteType.End => endPrefab,
             NoteType.Note => notePrefab,
             _ => throw new ArgumentException()
@@ -62,21 +63,21 @@ public class Spawner : MonoBehaviour
         return new[] { leftSprite, downSprite, upSprite, rightSprite }[column];
     }
 
-    private LongNoteStart AddLongNoteTail(LongNoteStart start, float destinationTime, int column)
+    public void BuildLongNoteTail(LongNoteBeginning beginning, float destinationTime)
     {
-        var longNoteEndSpawn = reader.NoteQueues[column].Peek().SpawnTime;
-        var tailObject = Instantiate(tailPrefab);
-        start.Tail = tailObject.GetComponent<LongNoteTail>();
-        start.Tail.Column = column;
-        start.Tail.DestinationTime = destinationTime;
-        start.Tail.LengthInBeats = start.Tail.SpawnTime - longNoteEndSpawn;
-        return start;
+        //var longNoteEndSpawn = reader.NoteQueues[column].Peek().SpawnTime;
+        var tailObject = Instantiate(tailPrefab, notesContainer.transform);
+        var tail = tailObject.GetComponent<LongNoteTail>();
+        tail.Beginning = beginning;
+        tail.DestinationTime = destinationTime;
+        tail.SpriteRenderer.sprite = tailSprite;
+        //tail.LengthInBeats = tail.SpawnTime - longNoteEndSpawn;
     }
 
     [SerializeField] private GameObject notesContainer;
 
     [SerializeField] private GameObject notePrefab;
-    [SerializeField] private GameObject startPrefab;
+    [SerializeField] private GameObject beginningPrefab;
     [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject tailPrefab;
 
@@ -85,8 +86,6 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Sprite upSprite;
     [SerializeField] private Sprite rightSprite;
     [SerializeField] private Sprite tailSprite;
-
-
 
     private NoteReader reader;
     private BaseNote[] lastNotes = { null, null, null, null };

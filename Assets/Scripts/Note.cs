@@ -47,6 +47,4 @@ public class Note : BaseNote
         GameManager.Instance.DisplayHitComment("Marvelous");
         return 320;
     }
-
-    [SerializeField] private Button button;
 }
