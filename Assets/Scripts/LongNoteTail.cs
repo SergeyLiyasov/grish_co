@@ -25,7 +25,7 @@ public class LongNoteTail : BaseNote
             Beginning.PressingTime.HasValue &&
             Button.ReleasingTime < Beginning.PressingTime)
         {
-            SpriteRenderer.sortingLayerName = "Note tails";
+            SpriteRenderer.sortingLayerName = "Activated note tails";
             SpriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
         }
     }

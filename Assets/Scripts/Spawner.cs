@@ -8,7 +8,6 @@ public class Spawner : MonoBehaviour
     public List<NoteDescriptor>[] Notes { get; set; }
     public static Spawner Instance { get; private set; }
     public NoteReader Reader { get; set; }
-    // public string text { get; set; } = "Assets/Descriptors/1.txt";
 
     void Start()
     {
@@ -25,9 +24,6 @@ public class Spawner : MonoBehaviour
             if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
             Reader.NoteQueues[column].Dequeue();
             BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
-
-            //Debug.Log($"Spawned note �{nextIndexes[column]} in {column} column");
-            //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
         }
     }
 
@@ -35,11 +31,6 @@ public class Spawner : MonoBehaviour
     {
         var noteObject = Instantiate(GetNotePrefabByType(type), notesContainer.transform);
         var note = noteObject.GetComponent<BaseNote>();
-        //if (note is LongNoteStart start)
-        //{
-        //    SpawnLongNoteTail(start, destinationTime, column);
-        //    Debug.Log(start.Tail.LengthInBeats);
-        //}
         if (note is LongNoteEnd end)
             end.Beginning = lastNotes[column] as LongNoteBeginning;
         note.DestinationTime = destinationTime;
