@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
+    public static string PathToDifficulty { get; set; }
+
     public GameManager() => Instance = this;
 
     void Start()

@@ -5,16 +5,18 @@ using UnityEngine;
 public class Conductor : MonoBehaviour
 {
     public static Conductor Instance { get; private set; }
+
     public float SongPosition { get; private set; }
     public float Bpm { get; set; }
     public float SecPerBeat { get; set; }
     public float MapOffset { get; set; }
     public float Offset { get; set; }
-    public float SongPositionInBeats { get; set; }
+    public float SongPositionInBeats => SongPosition / SecPerBeat;
     public float BeatsFromSpawnToDestination { get; set; }
     public float BeatsShownInAdvance { get; set; }
     public double SixteenthNoteSize { get; private set; }
     public AudioSource AudioSource { get; set; }
+    public static AudioClip Music { get; set; }
 
     public Conductor() => Instance = this;
 
@@ -27,29 +29,29 @@ public class Conductor : MonoBehaviour
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
         AudioSource = GetComponent<AudioSource>();
+        AudioSource.clip = Music;
     }
 
     void Update()
     {
         if (firstTimeCalculation)
         {
-            //deltaSongPos = (float)AudioSettings.dspTime;
+            deltaSongPos = (float)AudioSettings.dspTime;
             AudioSource.Play();
-            Debug.Log("Song pos on start: " + deltaSongPos);
-            SongPosition = (float)AudioSource.timeSamples / AudioSettings.outputSampleRate - Offset;
+            Debug.Log("Song pos on start: " + Offset);
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
             firstTimeCalculation = false;
         }
-        else if ((float)AudioSource.timeSamples / AudioSettings.outputSampleRate - Offset > SongPosition)
+        else if ((float)(AudioSettings.dspTime - deltaSongPos - Offset) > SongPosition)
         {
-            SongPosition = (float)AudioSource.timeSamples / AudioSettings.outputSampleRate - Offset;
+            SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
             //Debug.Log("Song pos on update: " + SongPositionInBeats);
         }
         else
         {
             SongPosition += Time.unscaledDeltaTime;
         }
-        //Debug.Log("Song pos on update: " + SongPosition);
-        SongPositionInBeats = SongPosition / SecPerBeat;
+        Debug.Log("Song pos on update: " + SongPosition);
     }
     
     private float deltaSongPos;

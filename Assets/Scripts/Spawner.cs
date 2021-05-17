@@ -7,24 +7,26 @@ public class Spawner : MonoBehaviour
 {
     public List<NoteDescriptor>[] Notes { get; set; }
     public static Spawner Instance { get; private set; }
+    public NoteReader Reader { get; set; }
+    // public string text { get; set; } = "Assets/Descriptors/1.txt";
 
     void Start()
     {
         Instance = this;
-        reader = new NoteReader("Assets/Descriptors/1.txt");
+        Reader = new NoteReader(GameManager.PathToDifficulty);
     }
 
     void Update()
     {
-        for (var column = 0; column < reader.NoteQueues.Length; column++)
+        for (var column = 0; column < Reader.NoteQueues.Length; column++)
         {
-            if (reader.NoteQueues[column].Count == 0) continue;
-            var noteDescriptor = reader.NoteQueues[column].Peek();
+            if (Reader.NoteQueues[column].Count == 0) continue;
+            var noteDescriptor = Reader.NoteQueues[column].Peek();
             if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
-            reader.NoteQueues[column].Dequeue();
+            Reader.NoteQueues[column].Dequeue();
             BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
 
-            //Debug.Log($"Spawned note ¹{nextIndexes[column]} in {column} column");
+            //Debug.Log($"Spawned note ï¿½{nextIndexes[column]} in {column} column");
             //Debug.Log(Conductor.Instance.BeatNumber + Conductor.Instance.BeatsShownInAdvance);
         }
     }
@@ -87,6 +89,5 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Sprite rightSprite;
     [SerializeField] private Sprite tailSprite;
 
-    private NoteReader reader;
     private BaseNote[] lastNotes = { null, null, null, null };
 }
