@@ -579,7 +579,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1310,7 +1310,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.089
   m_Pitch: 1
   Loop: 0
@@ -1421,6 +1421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7728a9e54284c5f49af5a41bfa044591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AudioSource: {fileID: 0}
 --- !u!1 &1421580256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,7 +1646,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d0399227b8030443a27bb9836bfa8fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Assets/Descriptors/1.txt
   notesContainer: {fileID: 1628751265}
   notePrefab: {fileID: 2081730760187538805, guid: 5564ea2b6e441854384c9aa415d0719a,
     type: 3}

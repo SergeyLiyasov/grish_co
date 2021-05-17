@@ -5,7 +5,6 @@ using UnityEngine;
 public class Conductor : MonoBehaviour
 {
     public static Conductor Instance { get; private set; }
-
     public float SongPosition { get; private set; }
     public float Bpm { get; set; }
     public float SecPerBeat { get; set; }
@@ -13,23 +12,26 @@ public class Conductor : MonoBehaviour
     public float Offset { get; set; }
     public float SongPositionInBeats => SongPosition / SecPerBeat;
     public float BeatsFromSpawnToDestination { get; set; }
-    public float BeatsShownInAdvance { get; set; }
+    public static float BeatsShownInAdvance { get; set; }
     public double SixteenthNoteSize { get; private set; }
-    public AudioSource AudioSource { get; set; }
+    public static float Volume { get; set; }
+    public AudioSource AudioSource;
     public static AudioClip Music { get; set; }
 
     public Conductor() => Instance = this;
 
     void Start()
-    {
+    {   
         SixteenthNoteSize = 0.1;
-        BeatsShownInAdvance = 3f;
+        //BeatsShownInAdvance = 2f;
         BeatsFromSpawnToDestination = BeatsShownInAdvance * 2;
-        Offset = 2.435f;
+        globalOffset = 0.055f;
+        Offset = 2.435f + globalOffset;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;
         AudioSource = GetComponent<AudioSource>();
         AudioSource.clip = Music;
+        AudioSource.volume = Volume;
     }
 
     void Update()
