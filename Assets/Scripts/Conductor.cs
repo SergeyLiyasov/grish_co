@@ -25,7 +25,7 @@ public class Conductor : MonoBehaviour
         SixteenthNoteSize = 0.1;
         //BeatsShownInAdvance = 2f;
         BeatsFromSpawnToDestination = BeatsShownInAdvance * 2;
-        globalOffset = 0.055f;
+        globalOffset = 0.1f;
         Offset = 2.435f + globalOffset;
         Bpm = 200;
         SecPerBeat = 60 / Bpm;

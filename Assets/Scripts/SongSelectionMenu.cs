@@ -31,7 +31,7 @@ public class SongSelectionMenu : MonoBehaviour
 
     public void BuildButtonFromData(GameObject template, string buttonText, GameObject parent)
     {
-        Debug.Log("ye");
+        //Debug.Log("ye");
         var button = Instantiate(template);
         button.SetActive(true);
         var textObject = button.transform.Find("Text");
@@ -39,6 +39,11 @@ public class SongSelectionMenu : MonoBehaviour
         text.SetText(buttonText);
         button.transform.SetParent(parent.transform, false);
         textObject.transform.SetParent(button.transform, false);
+    }
+
+    public void SearchSong()
+    {
+
     }
 
     public void LoadSong() 
