@@ -15,6 +15,7 @@ public class SongSelectionMenu : MonoBehaviour
 
     private void Start()
     {
+        songButtonNames = new Dictionary<GameObject, string>();
         FillSongList();
     }
 
@@ -27,13 +28,13 @@ public class SongSelectionMenu : MonoBehaviour
             BuildButtonFromData(songTemplate, name, songContainer);
         }
     }
- 
 
     public void BuildButtonFromData(GameObject template, string buttonText, GameObject parent)
     {
         //Debug.Log("ye");
         var button = Instantiate(template);
         button.SetActive(true);
+        songButtonNames.Add(button, buttonText);
         var textObject = button.transform.Find("Text");
         var text = textObject.GetComponent<TextMeshProUGUI>();
         text.SetText(buttonText);
@@ -43,7 +44,25 @@ public class SongSelectionMenu : MonoBehaviour
 
     public void SearchSong()
     {
-
+        var inputText = "";
+        if (inputField.text != "")
+            inputText = (inputField.text.First().ToString().ToUpper() + inputField.text.Substring(1)).Trim();
+        foreach (var button in songButtonNames)
+            button.Key.SetActive(true);
+        if (songButtonNames.ContainsValue(inputText))
+        {
+            var searchResults = songButtonNames.Where(x => x.Value == inputText).Select(x => x.Value);
+            foreach(var button in songButtonNames)
+            {
+                if (!searchResults.Contains(button.Value))
+                    button.Key.SetActive(false);
+            }
+        }
+        else if (inputText != "")
+        {
+            foreach (var button in songButtonNames)
+                button.Key.SetActive(false);
+        }
     }
 
     public void LoadSong() 
@@ -53,4 +72,6 @@ public class SongSelectionMenu : MonoBehaviour
 
     [SerializeField] private GameObject songTemplate;
     [SerializeField] private GameObject songContainer;
+    [SerializeField] private TMP_InputField inputField;
+    private Dictionary<GameObject, string> songButtonNames;
 }
