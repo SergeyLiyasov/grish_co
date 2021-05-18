@@ -49,9 +49,9 @@ public class SongSelectionMenu : MonoBehaviour
             inputText = (inputField.text.First().ToString().ToUpper() + inputField.text.Substring(1)).Trim();
         foreach (var button in songButtonNames)
             button.Key.SetActive(true);
-        if (songButtonNames.ContainsValue(inputText))
+        if (songButtonNames.Any(x => x.Value.Contains(inputText)))
         {
-            var searchResults = songButtonNames.Where(x => x.Value == inputText).Select(x => x.Value);
+            var searchResults = songButtonNames.Where(x => x.Value.Contains(inputText)).Select(x => x.Value);
             foreach(var button in songButtonNames)
             {
                 if (!searchResults.Contains(button.Value))
