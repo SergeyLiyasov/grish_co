@@ -58,13 +58,11 @@ public class Spawner : MonoBehaviour
 
     public void BuildLongNoteTail(LongNoteBeginning beginning, float destinationTime)
     {
-        //var longNoteEndSpawn = reader.NoteQueues[column].Peek().SpawnTime;
         var tailObject = Instantiate(tailPrefab, notesContainer.transform);
         var tail = tailObject.GetComponent<LongNoteTail>();
         tail.Beginning = beginning;
         tail.DestinationTime = destinationTime;
         tail.SpriteRenderer.sprite = tailSprite;
-        //tail.LengthInBeats = tail.SpawnTime - longNoteEndSpawn;
     }
 
     [SerializeField] private GameObject notesContainer;

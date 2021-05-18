@@ -8,13 +8,12 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-    public Queue<BaseNote>[] NotesToBePressed { get; set; }
-
-    public List<Button> NoteButtons { get; set; } = new List<Button>();
-
     public static GameManager Instance { get; private set; }
-
     public static string PathToDifficulty { get; set; }
+
+    public ParticleSystem[] Particles => particles;
+    public List<Button> NoteButtons { get; } = new List<Button>();
+    public Queue<BaseNote>[] NotesToBePressed { get; private set; }
 
     public GameManager() => Instance = this;
 
@@ -59,7 +58,7 @@ public class GameManager : MonoBehaviour
     public Vector2 GetColumnPosition(int index)
     {
         return index < columnsNumber
-            ? columnsPosition + new Vector2(columnWidth * index, 9f)
+            ? columnsPosition + new Vector2(columnWidth * index, 9)
             : throw new ArgumentException();
     }
 
@@ -67,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text scoreDisplayer;
     [SerializeField] private Text hitCommentDisplayer;
+    [SerializeField] private ParticleSystem[] particles;
 
     private int score
     {

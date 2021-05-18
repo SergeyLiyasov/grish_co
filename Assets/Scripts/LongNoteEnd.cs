@@ -10,7 +10,7 @@ public class LongNoteEnd : BaseNote
     public override int Column { get => Beginning.Column; set => Beginning.Column = value; }
     public LongNoteBeginning Beginning { get; set; }
 
-    new private void Start()
+    public new void Start()
     {
         base.Start();
         Beginning.ShouldSpawnTails = false;

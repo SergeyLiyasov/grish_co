@@ -12,10 +12,11 @@ public class LongNoteTail : BaseNote
     public override int Column { get => Beginning.Column; set => Beginning.Column = value; }
     public LongNoteBeginning Beginning { get; set; }
 
-    new public void Start()
+    public new void Start()
     {
         base.Start();
         transform.localScale = new Vector2(transform.localScale.x, Scale);
+        particles = GameManager.Instance.Particles[Column];
     }
 
     void Update()
@@ -25,16 +26,11 @@ public class LongNoteTail : BaseNote
             Beginning.PressingTime.HasValue &&
             Button.ReleasingTime < Beginning.PressingTime)
         {
+            if (Random.value <= 0.03f) particles.Emit(1);
             SpriteRenderer.sortingLayerName = "Activated note tails";
             SpriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
         }
     }
-    //public void Move()
-    //{
-    //    var timeDelta = Conductor.Instance.SongPositionInBeats - SpawnTime;
-    //    var velocity = (destinationPoint - spawnPoint) / Conductor.Instance.BeatsFromSpawnToDestination;
-    //    transform.position = spawnPoint + velocity * timeDelta;
-    //}
 
     public override int ReceiveSignal(bool activating) => 0;
 
@@ -49,8 +45,6 @@ public class LongNoteTail : BaseNote
             inCollider = false;
     }
 
+    private ParticleSystem particles;
     private bool inCollider;
-    //gameObject.SetActive(false);
-    //private Vector2 spawnPoint;
-    //private Vector2 destinationPoint;
 }

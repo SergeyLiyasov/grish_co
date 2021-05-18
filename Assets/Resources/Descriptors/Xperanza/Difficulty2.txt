@@ -2,7 +2,7 @@ note 1 0
 note 1 4
 note 1 8
 note 0 12
-start 1 12
+beginning 1 12
 note 2 12
 note 3 12
 note 0 16

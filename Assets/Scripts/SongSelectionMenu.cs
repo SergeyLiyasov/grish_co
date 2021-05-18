@@ -31,7 +31,6 @@ public class SongSelectionMenu : MonoBehaviour
 
     public void BuildButtonFromData(GameObject template, string buttonText, GameObject parent)
     {
-        //Debug.Log("ye");
         var button = Instantiate(template);
         button.SetActive(true);
         var textObject = button.transform.Find("Text");

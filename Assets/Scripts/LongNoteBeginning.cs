@@ -26,6 +26,7 @@ public class LongNoteBeginning : BaseNote
 
     private IEnumerator SpawnTail()
     {
+        yield return new WaitForSeconds(5f / 9 * LongNoteTail.Scale * Conductor.Instance.SecPerBeat / -Velocity.y);
         while (ShouldSpawnTails)
         {
             Spawner.Instance.BuildLongNoteTail(this,

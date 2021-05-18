@@ -11,6 +11,12 @@ public class Note : BaseNote
     public override float DestinationTime { get; set; }
     public override int Column { get; set; }
 
+    public new void Start()
+    {
+        base.Start();
+        particles = GameManager.Instance.Particles[Column];
+    }
+
     private void Update()
     {
         Move();
@@ -32,19 +38,25 @@ public class Note : BaseNote
         if (distance > 1)
         {
             GameManager.Instance.DisplayHitComment("Okay");
+            particles.Emit(1);
             return 100;
         }
         if (distance > 0.35)
         {
             GameManager.Instance.DisplayHitComment("Good");
+            particles.Emit(4);
             return 200;
         }
         if (distance > 0.05)
         {
             GameManager.Instance.DisplayHitComment("Perfect");
+            particles.Emit(5);
             return 300;
         }
         GameManager.Instance.DisplayHitComment("Marvelous");
+        particles.Emit(7);
         return 320;
     }
+
+    private ParticleSystem particles;
 }

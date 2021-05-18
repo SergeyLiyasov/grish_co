@@ -17,15 +17,10 @@ public class Metronome : MonoBehaviour
             if (beatNumber % 2 == 0)
             {
                 audioSource.Play();
-                Debug.Log($"time: {Conductor.Instance.SongPosition}");
-                
                 StartCoroutine(Flash());
             }
             lastBeat += Conductor.Instance.SecPerBeat;
             beatNumber++;
-            //Debug.Log($"Beat number: {beatNumber}");
-            //Debug.Log($"Last beat Metro: {lastBeat}");
-            //Debug.Log($"SongPositionInBeats: {Conductor.Instance.SongPositionInBeats}");
         }
     }
 
@@ -39,6 +34,7 @@ public class Metronome : MonoBehaviour
     [SerializeField] private Sprite unpressedSprite;
     [SerializeField] private Sprite pressedSprite;
     [SerializeField] private AudioSource audioSource;
+
     private SpriteRenderer spriteRenderer;
     private float lastBeat;
     private int beatNumber;

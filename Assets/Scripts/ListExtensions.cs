@@ -4,7 +4,7 @@ using System.Linq;
 
 public static class ListExtensions
 {
-    public static void Resize<T>(this List<T> list, int size, T value)
+    public static void Resize<T>(this List<T> list, int size, T value = default)
     {
         int current = list.Count;
         if (size < current)
@@ -16,9 +16,6 @@ public static class ListExtensions
             list.AddRange(Enumerable.Repeat(value, size - current));
         }
     }
-
-    public static void Resize<T>(this List<T> list, int size)
-        => Resize(list, size, default);
 
     public static void InsertWithResize<T>(this List<T> list, int index, T value)
     {

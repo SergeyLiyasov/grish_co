@@ -19,13 +19,11 @@ public class MainMenu : MonoBehaviour
     public void ChangeVolume(float volume)
     {
         Conductor.Volume = volume;
-        Debug.Log(Conductor.Volume);
     }
 
     public void ChangeScrollSpeed(float scrollSpeed)
     {
         Conductor.BeatsShownInAdvance = scrollSpeed;
-        Debug.Log(Conductor.BeatsShownInAdvance);
     }
 
     public void Quit()
