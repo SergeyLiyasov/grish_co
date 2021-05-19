@@ -9,6 +9,7 @@ public class Conductor : MonoBehaviour
     //public float Bpm => 60 / SecPerBeat;
     public float MapOffset { get; set; }
     public float Offset { get; set; }
+    public float GlobalOffset { get { return 0.11f; } private set { } }
     public float BeatsFromSpawnToDestination { get; set; }
     public static float BeatsShownInAdvance { get; set; }
     public double SixteenthNoteSize { get; private set; }
@@ -20,18 +21,18 @@ public class Conductor : MonoBehaviour
     public Conductor() => Instance = this;
 
     void Start()
-    {   
+    {
         SixteenthNoteSize = 0.1;
         BeatsFromSpawnToDestination = BeatsShownInAdvance * 2;
-        globalOffset = 0.1f;
-        Offset = 2.435f + globalOffset;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = Music;
-        audioSource.volume = Volume;
+        audioSource.volume = Volume; 
     }
 
     void Update()
     {
+        Debug.Log(Offset);
+        Debug.Log(SongPositionInBeats);
         if (firstTimeCalculation)
         {
             deltaSongPos = (float)AudioSettings.dspTime;
@@ -51,6 +52,5 @@ public class Conductor : MonoBehaviour
     
     private AudioSource audioSource;
     private float deltaSongPos;
-    private float globalOffset;
     private bool firstTimeCalculation = true;
 }

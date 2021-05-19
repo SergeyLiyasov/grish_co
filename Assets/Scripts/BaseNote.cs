@@ -33,7 +33,8 @@ public abstract class BaseNote : MonoBehaviour
         }
         else if (otherCollider.CompareTag("NotesDeactivatorCollider"))
         {
-            gameObject.SetActive(false);
+            GameManager.Instance.Combo = 0;//может возникнуть некоторый баг
+            Destroy(gameObject);
         }
     }
 

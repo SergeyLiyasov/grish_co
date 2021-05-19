@@ -45,12 +45,12 @@ public class SongSelectionMenu : MonoBehaviour
     {
         var inputText = string.Empty;
         if (inputField.text != string.Empty)
-            inputText = (inputField.text.First().ToString().ToUpper() + inputField.text.Substring(1)).Trim();
+            inputText = inputField.text.ToLower().Trim();
         foreach (var button in songButtonNames)
             button.Key.SetActive(true);
-        if (songButtonNames.Any(x => x.Value.Contains(inputText)))
+        if (songButtonNames.Any(x => x.Value.ToLower().Contains(inputText)))
         {
-            var searchResults = songButtonNames.Where(x => x.Value.Contains(inputText)).Select(x => x.Value);
+            var searchResults = songButtonNames.Where(x => x.Value.ToLower().Contains(inputText)).Select(x => x.Value);
             foreach(var button in songButtonNames)
             {
                 if (!searchResults.Contains(button.Value))
@@ -62,6 +62,12 @@ public class SongSelectionMenu : MonoBehaviour
             foreach (var button in songButtonNames)
                 button.Key.SetActive(false);
         }
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("Menu");
+
     }
 
     public void LoadSong() 

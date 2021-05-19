@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class MainMenu : MonoBehaviour
     {
         Conductor.Volume = volume;
         Conductor.BeatsShownInAdvance = scrollSpeed;
+        Debug.Log(scrollSlider.value);
     }
 
     public void SongSelection()
@@ -19,11 +21,14 @@ public class MainMenu : MonoBehaviour
     public void ChangeVolume(float volume)
     {
         Conductor.Volume = volume;
+        volumeSlider.value = volume;
     }
 
     public void ChangeScrollSpeed(float scrollSpeed)
     {
         Conductor.BeatsShownInAdvance = scrollSpeed;
+        scrollSlider.value = scrollSpeed;
+        Debug.Log(scrollSlider.value);
     }
 
     public void Quit()
@@ -31,6 +36,8 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    private float volume = 0.09f;
-    private float scrollSpeed = 2f;
+    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Slider scrollSlider;
+    private static float volume = 0.09f;
+    private static float scrollSpeed = 2f;
 }

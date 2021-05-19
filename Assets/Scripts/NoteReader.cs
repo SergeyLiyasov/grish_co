@@ -34,6 +34,9 @@ public class NoteReader
             var body = section.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Where(s => s != string.Empty).Skip(1);
             switch (header)
             {
+                case "General":
+                    ReadAudioName(body.ToArray());
+                    break;
                 case "TimingPoints":
                     ReadTiming(body.ToArray());
                     break;
@@ -42,6 +45,11 @@ public class NoteReader
                     break;
             }
         }
+    }
+
+    private void ReadAudioName(string[] generalSection)
+    {
+        var firstStr = generalSection[0].Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries)[1];//поставить поддержку любого названия
     }
 
     private void ReadMeta(string[] metaSection)
@@ -55,9 +63,9 @@ public class NoteReader
     private void ReadTiming(string[] timingSection)
     {
         var firstStr = timingSection[0].Split(',');
-        Conductor.Instance.Offset = float.Parse(firstStr[0],
-            System.Globalization.CultureInfo.InvariantCulture) / 1000;
-        Conductor.Instance.SecPerBeat = float.Parse(firstStr[1]) / 1000;
+        Conductor.Instance.Offset = (float)double.Parse(firstStr[0],
+            System.Globalization.CultureInfo.InvariantCulture) / 1000 + Conductor.Instance.GlobalOffset;
+        Conductor.Instance.SecPerBeat = (float)double.Parse(firstStr[1], System.Globalization.CultureInfo.InvariantCulture) / 1000;
     }
 
     private void ReadNotes(IEnumerable<string> notesSection)
@@ -66,7 +74,8 @@ public class NoteReader
         {
             var strParts = str.Split(new[] { ',', ':' });
             var column = (int.Parse(strParts[0]) - 64) / 128;
-            var destTime = (int.Parse(strParts[2]) / 1000f - Conductor.Instance.Offset) / Conductor.Instance.SecPerBeat;
+            Debug.Log(Conductor.Instance.Offset);
+            var destTime = (int.Parse(strParts[2]) / 1000f - Conductor.Instance.Offset + Conductor.Instance.GlobalOffset) / Conductor.Instance.SecPerBeat;
             if (strParts[3] == "1")
             {
                 var descriptor = new NoteDescriptor(NoteType.Note, destTime);
@@ -77,7 +86,7 @@ public class NoteReader
                 var descriptor = new NoteDescriptor(NoteType.Beginning, destTime);
                 NoteQueues[column].Enqueue(descriptor);
 
-                destTime = (int.Parse(strParts[5]) / 1000f - Conductor.Instance.Offset) / Conductor.Instance.SecPerBeat;
+                destTime = (int.Parse(strParts[5]) / 1000f - Conductor.Instance.Offset + Conductor.Instance.GlobalOffset) / Conductor.Instance.SecPerBeat;
                 descriptor = new NoteDescriptor(NoteType.End, destTime);
                 NoteQueues[column].Enqueue(descriptor);
             }

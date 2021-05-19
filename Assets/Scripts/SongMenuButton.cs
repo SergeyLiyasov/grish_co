@@ -15,6 +15,7 @@ public class SongMenuButton : MonoBehaviour
 
     public void GetDifficultiesFromSongName()
     {
+        parsedDifficultyNames = new Dictionary<string, string>();
         var textObject = transform.Find("Text");
         var songName = textObject.GetComponent<TextMeshProUGUI>().text;
         currentSongName = songName;
@@ -27,18 +28,20 @@ public class SongMenuButton : MonoBehaviour
         }
         foreach (var difficulty in difficulties)
         {
-            // TODO: difficulty.Name
-            songMenu.BuildButtonFromData(difficultyTemplate, difficulty.Name.Substring(0, difficulty.Name.Length - 4), difficultyContainer);
+            var parsedString = difficulty.Name.Split(new char[] { '[', ']' }, System.StringSplitOptions.RemoveEmptyEntries);
+            var parsedDifficultyName = parsedString[parsedString.Length - 2];
+            parsedDifficultyNames.Add(difficulty.Name, parsedDifficultyName);
+            songMenu.BuildButtonFromData(difficultyTemplate, parsedDifficultyName, difficultyContainer);
         }
     }
 
     public void LoadSongReader()
     {
         var textObject = transform.Find("Text");
-        var difficultyName = textObject.GetComponent<TextMeshProUGUI>().text;
+        var difficultyName = parsedDifficultyNames.FirstOrDefault(x => x.Value == textObject.GetComponent<TextMeshProUGUI>().text).Key;
         var clip = Resources.Load<AudioClip>("Descriptors/" + currentSongName + '/' + currentSongName);
         Conductor.Music = clip;
-        GameManager.PathToDifficulty = pathToDescriptors + currentSongName + '/' + difficultyName + descriptorExtension;
+        GameManager.PathToDifficulty = pathToDescriptors + currentSongName + '/' + difficultyName;
         SceneManager.LoadScene("Game");
     }
 
@@ -46,4 +49,5 @@ public class SongMenuButton : MonoBehaviour
     [SerializeField] private GameObject difficultyContainer;
 
     private static string currentSongName;
+    private static Dictionary<string, string> parsedDifficultyNames;
 }

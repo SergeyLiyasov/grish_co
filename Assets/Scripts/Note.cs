@@ -35,26 +35,26 @@ public class Note : BaseNote
 
     private int GetPressingScore(float distance)
     {
-        if (distance > 1)
+        if (distance > 2)
         {
             GameManager.Instance.DisplayHitComment("Okay");
             particles.Emit(1);
             return 100;
         }
-        if (distance > 0.35)
+        if (distance > 0.7)
         {
             GameManager.Instance.DisplayHitComment("Good");
-            particles.Emit(4);
+            particles.Emit(2);
             return 200;
         }
-        if (distance > 0.05)
+        if (distance > 0.2)
         {
             GameManager.Instance.DisplayHitComment("Perfect");
-            particles.Emit(5);
+            particles.Emit(3);
             return 300;
         }
         GameManager.Instance.DisplayHitComment("Marvelous");
-        particles.Emit(7);
+        particles.Emit(4);
         return 320;
     }
 

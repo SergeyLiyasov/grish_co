@@ -39,17 +39,17 @@ public class LongNoteEnd : BaseNote
 
     private int GetPressingScore(float distance)
     {
-        if (distance > 1)
+        if (distance > 2)
         {
             GameManager.Instance.DisplayHitComment("LEnd: Okay");
             return 100;
         }
-        if (distance > 0.35)
+        if (distance > 0.7)
         {
             GameManager.Instance.DisplayHitComment("LEnd: Good");
             return 200;
         }
-        if (distance > 0.05)
+        if (distance > 0.2)
         {
             GameManager.Instance.DisplayHitComment("LEnd: Perfect");
             return 300;

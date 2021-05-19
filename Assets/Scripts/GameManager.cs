@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem[] Particles => particles;
     public List<Button> NoteButtons { get; } = new List<Button>();
     public Queue<BaseNote>[] NotesToBePressed { get; private set; }
+    public int Combo { get; set; }
 
     public GameManager() => Instance = this;
 
@@ -25,6 +26,11 @@ public class GameManager : MonoBehaviour
         {
             NotesToBePressed[i] = new Queue<BaseNote>();
         }
+    }
+
+    private void Update()
+    {
+        DisplayCombo(Combo);
     }
 
     public void RegisterNote(BaseNote note)
@@ -52,6 +58,7 @@ public class GameManager : MonoBehaviour
         {
             var note = NotesToBePressed[button.Column].Peek();
             score += note.ReceiveSignal(activating);
+            Combo++;
         }
     }
 
@@ -63,9 +70,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void DisplayHitComment(string str) => hitCommentDisplayer.text = $"Last hit: {str}";
+    public void DisplayCombo(int combo) => comboDisplayer.text = $"Combo: {combo}";
 
     [SerializeField] private Text scoreDisplayer;
     [SerializeField] private Text hitCommentDisplayer;
+    [SerializeField] private Text comboDisplayer;
     [SerializeField] private ParticleSystem[] particles;
 
     private int score
@@ -78,6 +87,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    
     private int _score;
     private int columnsNumber = 4;
     private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
