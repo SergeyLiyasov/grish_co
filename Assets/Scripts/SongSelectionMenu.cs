@@ -43,8 +43,8 @@ public class SongSelectionMenu : MonoBehaviour
 
     public void SearchSong()
     {
-        var inputText = "";
-        if (inputField.text != "")
+        var inputText = string.Empty;
+        if (inputField.text != string.Empty)
             inputText = (inputField.text.First().ToString().ToUpper() + inputField.text.Substring(1)).Trim();
         foreach (var button in songButtonNames)
             button.Key.SetActive(true);
@@ -57,7 +57,7 @@ public class SongSelectionMenu : MonoBehaviour
                     button.Key.SetActive(false);
             }
         }
-        else if (inputText != "")
+        else if (inputText != string.Empty)
         {
             foreach (var button in songButtonNames)
                 button.Key.SetActive(false);
@@ -72,5 +72,6 @@ public class SongSelectionMenu : MonoBehaviour
     [SerializeField] private GameObject songTemplate;
     [SerializeField] private GameObject songContainer;
     [SerializeField] private TMP_InputField inputField;
+    private NoteReader reader;
     private Dictionary<GameObject, string> songButtonNames;
 }

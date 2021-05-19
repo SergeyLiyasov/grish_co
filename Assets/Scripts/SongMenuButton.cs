@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class SongMenuButton : MonoBehaviour
 {
     private const string pathToDescriptors = "Assets/Resources/Descriptors/";
+    private const string descriptorExtension = ".osu";
     public SongSelectionMenu songMenu;
 
     public void GetDifficultiesFromSongName()
@@ -19,13 +20,14 @@ public class SongMenuButton : MonoBehaviour
         currentSongName = songName;
         var path = pathToDescriptors + songName.First().ToString().ToUpper() + songName.Substring(1);
         var directory = new DirectoryInfo(path);
-        var difficulties = directory.GetFiles("*.txt"); // TODO: изменить на .osu
+        var difficulties = directory.GetFiles("*.osu");
         foreach (Transform child in difficultyContainer.transform)
         {
             Destroy(child.gameObject);
         }
         foreach (var difficulty in difficulties)
         {
+            // TODO: difficulty.Name
             songMenu.BuildButtonFromData(difficultyTemplate, difficulty.Name.Substring(0, difficulty.Name.Length - 4), difficultyContainer);
         }
     }
@@ -36,7 +38,7 @@ public class SongMenuButton : MonoBehaviour
         var difficultyName = textObject.GetComponent<TextMeshProUGUI>().text;
         var clip = Resources.Load<AudioClip>("Descriptors/" + currentSongName + '/' + currentSongName);
         Conductor.Music = clip;
-        GameManager.PathToDifficulty = pathToDescriptors + currentSongName + '/' + difficultyName + ".txt"; // TODO: изменить на .osu
+        GameManager.PathToDifficulty = pathToDescriptors + currentSongName + '/' + difficultyName + descriptorExtension;
         SceneManager.LoadScene("Game");
     }
 

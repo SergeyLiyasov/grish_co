@@ -6,7 +6,7 @@ public class Conductor : MonoBehaviour
 {
     public static Conductor Instance { get; private set; }
     public float SongPosition { get; private set; }
-    public float Bpm { get; set; }
+    //public float Bpm => 60 / SecPerBeat;
     public float MapOffset { get; set; }
     public float Offset { get; set; }
     public float BeatsFromSpawnToDestination { get; set; }
@@ -15,7 +15,7 @@ public class Conductor : MonoBehaviour
     public static float Volume { get; set; }
     public static AudioClip Music { get; set; }
     public float SongPositionInBeats => SongPosition / SecPerBeat;
-    public float SecPerBeat => 60 / Bpm;
+    public float SecPerBeat { get; set; }
 
     public Conductor() => Instance = this;
 
@@ -25,7 +25,6 @@ public class Conductor : MonoBehaviour
         BeatsFromSpawnToDestination = BeatsShownInAdvance * 2;
         globalOffset = 0.1f;
         Offset = 2.435f + globalOffset;
-        Bpm = 200;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = Music;
         audioSource.volume = Volume;
