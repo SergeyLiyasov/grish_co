@@ -38,6 +38,8 @@ public class LongNoteTail : BaseNote
     {
         if (otherCollider.CompareTag("ButtonsInteractionCollider"))
             inCollider = true;
+        else if (otherCollider.CompareTag("NotesDeactivatorCollider"))
+            Destroy(gameObject);
     }
     new public void OnTriggerExit2D(Collider2D otherCollider)
     {

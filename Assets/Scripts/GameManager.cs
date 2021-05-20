@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public List<Button> NoteButtons { get; } = new List<Button>();
     public Queue<BaseNote>[] NotesToBePressed { get; private set; }
     public int Combo { get; set; }
+    public int MaxCombo { get; private set; }
 
     public GameManager() => Instance = this;
 
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         DisplayCombo(Combo);
+        GetMaxCombo();
     }
 
     public void RegisterNote(BaseNote note)
@@ -69,6 +71,12 @@ public class GameManager : MonoBehaviour
             : throw new ArgumentException();
     }
 
+    private void GetMaxCombo()
+    {
+        if (Combo > MaxCombo)
+            MaxCombo = Combo;
+    }
+
     public void DisplayHitComment(string str) => hitCommentDisplayer.text = $"Last hit: {str}";
     public void DisplayCombo(int combo) => comboDisplayer.text = $"Combo: {combo}";
 
@@ -77,7 +85,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text comboDisplayer;
     [SerializeField] private ParticleSystem[] particles;
 
-    private int score
+    public int score
     {
         get => _score;
         set

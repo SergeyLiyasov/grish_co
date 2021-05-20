@@ -55,3 +55,6 @@ TagManager:
   - name: Notes
     uniqueID: 3534016155
     locked: 0
+  - name: Pause
+    uniqueID: 3456100135
+    locked: 0

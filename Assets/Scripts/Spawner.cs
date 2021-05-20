@@ -12,18 +12,22 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         Instance = this;
+        Debug.Log(GameManager.PathToDifficulty);
         Reader = new NoteReader(GameManager.PathToDifficulty);
     }
 
     void Update()
     {
-        for (var column = 0; column < Reader.NoteQueues.Length; column++)
+        if (Conductor.Instance.musicStarted)
         {
-            if (Reader.NoteQueues[column].Count == 0) continue;
-            var noteDescriptor = Reader.NoteQueues[column].Peek();
-            if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
-            Reader.NoteQueues[column].Dequeue();
-            BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
+            for (var column = 0; column < Reader.NoteQueues.Length; column++)
+            {
+                if (Reader.NoteQueues[column].Count == 0) continue;
+                var noteDescriptor = Reader.NoteQueues[column].Peek();
+                if (noteDescriptor.SpawnTime >= Conductor.Instance.SongPositionInBeats) continue;
+                Reader.NoteQueues[column].Dequeue();
+                BuildNote(noteDescriptor.NoteType, noteDescriptor.DestinationTime, column);
+            }
         }
     }
 

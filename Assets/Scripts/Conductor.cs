@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Conductor : MonoBehaviour
 {
@@ -17,26 +18,48 @@ public class Conductor : MonoBehaviour
     public static AudioClip Music { get; set; }
     public float SongPositionInBeats => SongPosition / SecPerBeat;
     public float SecPerBeat { get; set; }
+    public bool musicStarted = false;
+    public static bool paused = false;
+    public static float pauseTimeStamp = -1f;
+    public static float pausedTime = 0;
 
     public Conductor() => Instance = this;
 
     void Start()
     {
+        paused = false;
         SixteenthNoteSize = 0.1;
         BeatsFromSpawnToDestination = BeatsShownInAdvance * 2;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = Music;
-        audioSource.volume = Volume; 
+        audioSource.volume = Volume;
+        musicLength = Music.length;
+        StartCoroutine(CountDown());
     }
 
     void Update()
     {
-        Debug.Log(Offset);
-        Debug.Log(SongPositionInBeats);
+        Debug.Log(paused);
+        if (!musicStarted)
+            return;
+        //Debug.Log(deltaSongPos);
+        if (paused)
+        {
+            if (pauseTimeStamp < 0f)
+            {
+                pauseTimeStamp = (float)AudioSettings.dspTime;
+                AudioListener.pause = true;
+                pauseCanvas.SetActive(true);
+            }
+            return;
+        }
+        else if (pauseTimeStamp > 0f)
+        {
+            AudioListener.pause = false;
+            pauseTimeStamp = -1f;
+        }
         if (firstTimeCalculation)
         {
-            deltaSongPos = (float)AudioSettings.dspTime;
-            audioSource.Play();
             SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
             firstTimeCalculation = false;
         }
@@ -48,8 +71,45 @@ public class Conductor : MonoBehaviour
         {
             SongPosition += Time.unscaledDeltaTime;
         }
+        
+        if (SongPosition > musicLength + 1)
+        {
+            EndingScreen.Score = GameManager.Instance.score;
+            EndingScreen.MaxCombo = GameManager.Instance.MaxCombo;
+            SceneManager.LoadScene("Ending Screen");
+        }
     }
-    
+
+    private IEnumerator CountDown()
+    {
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < 1; i++)
+        {
+            //Debug.Log("Countdown " + i.ToString());
+            yield return new WaitForSeconds(1f);
+        }
+        StartMusic();
+    }
+
+    void StartMusic()
+    {
+        Debug.Log("start");
+        audioSource.Play();
+        deltaSongPos = (float)AudioSettings.dspTime;
+        SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
+        Debug.Log(SongPosition);
+        musicStarted = true;
+    }
+
+    public void Resume()
+    {
+        pauseCanvas.SetActive(false);
+        paused = false;
+    }
+
+
+    [SerializeField] private GameObject pauseCanvas;
+    private float musicLength;
     private AudioSource audioSource;
     private float deltaSongPos;
     private bool firstTimeCalculation = true;
