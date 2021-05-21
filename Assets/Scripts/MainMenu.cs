@@ -36,8 +36,17 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void ActivateBinarySearch(bool isOn)
+    {
+        if (isOn)
+            SongSelectionMenu.UseBinarySearch = true;
+        else
+            SongSelectionMenu.UseBinarySearch = false;
+    }
+
     [SerializeField] private Slider volumeSlider;
     [SerializeField] private Slider scrollSlider;
+    [SerializeField] private Toggle useBinarySearchCheckbox;
     private static float volume = 0.09f;
     private static float scrollSpeed = 2f;
 }
