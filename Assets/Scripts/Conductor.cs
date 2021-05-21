@@ -39,7 +39,7 @@ public class Conductor : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(paused);
+        //Debug.Log(paused);
         if (!musicStarted)
             return;
         //Debug.Log(deltaSongPos);

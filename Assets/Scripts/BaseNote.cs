@@ -33,9 +33,19 @@ public abstract class BaseNote : MonoBehaviour
         }
         else if (otherCollider.CompareTag("NotesDeactivatorCollider"))
         {
-            GameManager.Instance.Combo = 0;//может возникнуть некоторый баг
-            Destroy(gameObject);
+            if (gameObject.name == "LongBeginning(Clone)" && gameObject.GetComponent<SpriteRenderer>().enabled == true)
+                GameManager.Instance.Combo = 0;
+            else if (gameObject.name == "LongBeginning(Clone)")
+                gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            else
+            {
+                GameManager.Instance.Combo = 0;
+                Destroy(gameObject);
+            }
+                
         }
+        else if (otherCollider.CompareTag("LongNotesDeactivatorCollider"))
+            Destroy(gameObject);
     }
 
     public void OnTriggerExit2D(Collider2D otherCollider)

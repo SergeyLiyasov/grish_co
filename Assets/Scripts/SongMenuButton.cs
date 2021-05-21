@@ -39,7 +39,11 @@ public class SongMenuButton : MonoBehaviour
     {
         var textObject = transform.Find("Text");
         var difficultyName = parsedDifficultyNames.FirstOrDefault(x => x.Value == textObject.GetComponent<TextMeshProUGUI>().text).Key;
-        var clip = Resources.Load<AudioClip>("Descriptors/" + currentSongName + '/' + currentSongName);
+        var path = "Assets/Resources/Descriptors/" + currentSongName + '/';
+        var clipLocation = Directory.GetFiles(path, "*.mp3").First();
+        var resourcesLocation = string.Join("/", clipLocation.Split('/'), 2, clipLocation.Split('/').Length - 2);
+        var clip = Resources.Load<AudioClip>(resourcesLocation.Substring(0, resourcesLocation.Length - 4));
+        Debug.Log(resourcesLocation);
         Conductor.Music = clip;
         GameManager.PathToDifficulty = pathToDescriptors + currentSongName + '/' + difficultyName;
         SceneManager.LoadScene("Game");

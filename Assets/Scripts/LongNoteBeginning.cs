@@ -44,25 +44,26 @@ public class LongNoteBeginning : BaseNote
         var distance = Mathf.Abs(transform.position.y - buttonPosition);
 
         PressingScore = GetPressingScore(distance);
+        Debug.Log(PressingScore);
         PressingTime = Conductor.Instance.SongPosition;
 
-        gameObject.SetActive(false);
+        SpriteRenderer.enabled = false;
         return 0;
     }
 
     private int GetPressingScore(float distance)
     {
-        if (distance > 1)
+        if (distance > 2)
         {
             GameManager.Instance.DisplayHitComment("LStart: Okay");
             return 100;
         }
-        if (distance > 0.35)
+        if (distance > 0.7)
         {
             GameManager.Instance.DisplayHitComment("LStart: Good");
             return 200;
         }
-        if (distance > 0.05)
+        if (distance > 0.2)
         {
             GameManager.Instance.DisplayHitComment("LStart: Perfect");
             return 300;
