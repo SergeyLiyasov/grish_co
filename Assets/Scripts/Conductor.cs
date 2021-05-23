@@ -27,12 +27,13 @@ public class Conductor : MonoBehaviour
 
     void Start()
     {
+        BeatsShownInAdvance = PlayerPrefs.GetFloat("scrollSpeed");
         paused = false;
         SixteenthNoteSize = 0.1;
         BeatsFromSpawnToDestination = BeatsShownInAdvance * 2;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = Music;
-        audioSource.volume = Volume;
+        audioSource.volume = PlayerPrefs.GetFloat("volume");
         musicLength = Music.length;
         StartCoroutine(CountDown());
     }
