@@ -49,16 +49,16 @@ public class NoteReader
 
     private void ReadAudioName(string[] generalSection)
     {
-        var firstStr = generalSection[0].Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries)[1];//поставить поддержку любого названия
+        var firstStr = generalSection[0].Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries)[1];
     }
 
-    private void ReadMeta(string[] metaSection)
+    /**private void ReadMeta(string[] metaSection)
     {
         var songName = metaSection[0];
         var artist = metaSection[2];
         var difficultyName = metaSection[5];
         var songMetadata = new SongMetadata(songName, artist, difficultyName, new string[0]);
-    }
+    }**/
 
     private void ReadTiming(string[] timingSection)
     {

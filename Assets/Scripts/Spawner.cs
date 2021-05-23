@@ -39,7 +39,10 @@ public class Spawner : MonoBehaviour
             end.Beginning = lastNotes[column] as LongNoteBeginning;
         note.DestinationTime = destinationTime;
         note.Column = column;
-        note.SpriteRenderer.sprite = GetSpriteByColumnNumber(column);
+        if (note is LongNoteEnd)
+            note.SpriteRenderer.sprite = endSprite;
+        else
+            note.SpriteRenderer.sprite = GetSpriteByColumnNumber(column);
         lastNotes[column] = note;
         return noteObject;     
     }
@@ -76,6 +79,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject tailPrefab;
 
+    [SerializeField] private Sprite endSprite;
     [SerializeField] private Sprite leftSprite;
     [SerializeField] private Sprite downSprite;
     [SerializeField] private Sprite upSprite;

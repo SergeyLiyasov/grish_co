@@ -27,20 +27,33 @@ public class SongSelectionMenu : MonoBehaviour
         foreach (var song in Directory.EnumerateDirectories(path))
         {
             var name = song.Split('\\').Last();
-            BuildButtonFromData(songTemplate, name, songContainer);
+            var strArray = name.Split('-');
+            var firstPart = strArray[0].Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+            var songId = int.Parse(firstPart[0]);
+            var artistParsed = string.Join(" ", firstPart, 1, firstPart.Length - 1);
+            var songName = strArray[1].Trim();
+            var parsedName = artistParsed + " - " + songName;
+            var button = BuildButtonFromData(songTemplate, parsedName, songContainer);
+            var textObject = button.transform.Find("Text");
+            var buttonText = textObject.GetComponent<TextMeshProUGUI>().text;
+            var meta = button.GetComponent<SongMetadata>();
+            meta.Artist = artistParsed;
+            meta.Title = songName;
+            meta.Id = songId;
+            songButtonNames.Add(buttonText, button);
         }
     }
 
-    public void BuildButtonFromData(GameObject template, string buttonText, GameObject parent)
+    public GameObject BuildButtonFromData(GameObject template, string buttonText, GameObject parent)
     {
         var button = Instantiate(template);
         button.SetActive(true);
-        songButtonNames.Add(buttonText, button);
         var textObject = button.transform.Find("Text");
         var text = textObject.GetComponent<TextMeshProUGUI>();
         text.SetText(buttonText);
         button.transform.SetParent(parent.transform, false);
         textObject.transform.SetParent(button.transform, false);
+        return button;
     }
 
     public void SearchSong()

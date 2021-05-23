@@ -16,10 +16,10 @@ public class SongMenuButton : MonoBehaviour
     public void GetDifficultiesFromSongName()
     {
         parsedDifficultyNames = new Dictionary<string, string>();
-        var textObject = transform.Find("Text");
-        var songName = textObject.GetComponent<TextMeshProUGUI>().text;
-        currentSongName = songName;
-        var path = pathToDescriptors + songName.First().ToString().ToUpper() + songName.Substring(1);
+        var metadata = gameObject.GetComponent<SongMetadata>();
+        var folderName = metadata.Id + " " + metadata.Artist + " - " + metadata.Title;
+        currentSongName = folderName;
+        var path = pathToDescriptors + folderName;
         var directory = new DirectoryInfo(path);
         var difficulties = directory.GetFiles("*.osu");
         foreach (Transform child in difficultyContainer.transform)

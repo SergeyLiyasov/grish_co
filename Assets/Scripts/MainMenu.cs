@@ -26,7 +26,8 @@ public class MainMenu : MonoBehaviour
 
     public void ChangeScrollSpeed(float scrollSpeed)
     {
-        Conductor.BeatsShownInAdvance = scrollSpeed;
+        var convertedSpeed = 1 / scrollSpeed;
+        Conductor.BeatsShownInAdvance = convertedSpeed;
         scrollSlider.value = scrollSpeed;
         Debug.Log(scrollSlider.value);
     }
