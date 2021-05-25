@@ -43,5 +43,15 @@ public class InputManagement : MonoBehaviour
         SceneManager.LoadScene("Song Selection");
     }
 
+    public void HideTutorial()
+    {
+        Conductor.Instance.HideTutorial();
+    }
+
+    /**public void FinishTutorial()
+    {
+        Conductor.Instance.FinishTutorial();
+    }**/
+
     [SerializeField] private KeyCode key;
 }

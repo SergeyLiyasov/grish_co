@@ -99,5 +99,5 @@ public class GameManager : MonoBehaviour
     private int _score;
     private int columnsNumber = 4;
     private Vector2 columnsPosition = new Vector2(-2.5f, 6.5f);
-    private float columnWidth = 2;
+    private float columnWidth = 1.5f;
 }

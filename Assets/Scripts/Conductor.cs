@@ -35,6 +35,7 @@ public class Conductor : MonoBehaviour
         audioSource.clip = Music;
         audioSource.volume = PlayerPrefs.GetFloat("volume");
         musicLength = Music.length;
+        ShowTutorial();
         StartCoroutine(CountDown());
     }
 
@@ -42,7 +43,10 @@ public class Conductor : MonoBehaviour
     {
         //Debug.Log(paused);
         if (!musicStarted)
-            return;
+        {
+            return;   
+        }
+        HideTutorial();
         //Debug.Log(deltaSongPos);
         if (paused)
         {
@@ -108,8 +112,30 @@ public class Conductor : MonoBehaviour
         paused = false;
     }
 
+    public void ShowTutorial()
+    {
+        tutorialCanvas.SetActive(true);
+    }
+
+    public void HideTutorial()
+    {
+        tutorialCanvas.SetActive(false);
+    }
+
+    /**public void ContinueTutorial()
+    {
+        tutorialCanvas.SetActive(true);
+        paused = true;
+    }
+
+    public void FinishTutorial()
+    {
+        tutorialCanvas.SetActive(false);
+        paused = false;
+    }**/
 
     [SerializeField] private GameObject pauseCanvas;
+    [SerializeField] private GameObject tutorialCanvas;
     private float musicLength;
     private AudioSource audioSource;
     private float deltaSongPos;
