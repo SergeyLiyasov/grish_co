@@ -74,7 +74,7 @@ public class NoteReader
         {
             var strParts = str.Split(new[] { ',', ':' });
             var column = (int.Parse(strParts[0]) - 64) / 128;
-            //Debug.Log(Conductor.Instance.Offset);
+            ////Debug.Log(Conductor.Instance.Offset);
             var destTime = (int.Parse(strParts[2]) / 1000f - Conductor.Instance.Offset + Conductor.Instance.GlobalOffset) / Conductor.Instance.SecPerBeat;
             if (strParts[3] == "1")
             {

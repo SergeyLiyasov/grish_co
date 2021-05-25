@@ -41,13 +41,13 @@ public class Conductor : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(paused);
+        ////Debug.Log(paused);
         if (!musicStarted)
         {
             return;   
         }
         HideTutorial();
-        //Debug.Log(deltaSongPos);
+        ////Debug.Log(deltaSongPos);
         if (paused)
         {
             if (pauseTimeStamp < 0f)
@@ -90,7 +90,7 @@ public class Conductor : MonoBehaviour
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < 1; i++)
         {
-            //Debug.Log("Countdown " + i.ToString());
+            ////Debug.Log("Countdown " + i.ToString());
             yield return new WaitForSeconds(1f);
         }
         StartMusic();
@@ -98,11 +98,11 @@ public class Conductor : MonoBehaviour
 
     void StartMusic()
     {
-        Debug.Log("start");
+        //Debug.Log("start");
         audioSource.Play();
         deltaSongPos = (float)AudioSettings.dspTime;
         SongPosition = (float)(AudioSettings.dspTime - deltaSongPos - Offset);
-        Debug.Log(SongPosition);
+        //Debug.Log(SongPosition);
         musicStarted = true;
     }
 

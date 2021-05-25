@@ -44,7 +44,7 @@ public class LongNoteBeginning : BaseNote
         var distance = Mathf.Abs(transform.position.y - buttonPosition);
 
         PressingScore = GetPressingScore(distance);
-        Debug.Log(PressingScore);
+        //Debug.Log(PressingScore);
         PressingTime = Conductor.Instance.SongPosition;
 
         SpriteRenderer.enabled = false;

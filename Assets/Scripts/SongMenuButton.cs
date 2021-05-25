@@ -43,7 +43,7 @@ public class SongMenuButton : MonoBehaviour
         var clipLocation = Directory.GetFiles(path, "*.mp3").First();
         var resourcesLocation = string.Join("/", clipLocation.Split('/'), 2, clipLocation.Split('/').Length - 2);
         var clip = Resources.Load<AudioClip>(resourcesLocation.Substring(0, resourcesLocation.Length - 4));
-        Debug.Log(resourcesLocation);
+        //Debug.Log(resourcesLocation);
         Conductor.Music = clip;
         GameManager.PathToDifficulty = pathToDescriptors + currentSongName + '/' + difficultyName;
         SceneManager.LoadScene("Game");

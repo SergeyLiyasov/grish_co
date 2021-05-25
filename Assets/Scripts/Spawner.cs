@@ -12,7 +12,7 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         Instance = this;
-        Debug.Log(GameManager.PathToDifficulty);
+        //Debug.Log(GameManager.PathToDifficulty);
         Reader = new NoteReader(GameManager.PathToDifficulty);
     }
 

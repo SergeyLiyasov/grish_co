@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
         if (PlayerPrefs.HasKey("scrollSpeed"))
         {
             scrollSlider.value = 1 / PlayerPrefs.GetFloat("scrollSpeed");
-            Debug.Log(scrollSlider.value);
+            //Debug.Log(scrollSlider.value);
         }     
         else
             PlayerPrefs.SetFloat("scrollSpeed", 2f);
@@ -41,7 +41,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetFloat("scrollSpeed", convertedSpeed);
         //Conductor.BeatsShownInAdvance = convertedSpeed;
         scrollSlider.value = scrollSpeed;
-        Debug.Log(scrollSlider.value);
+        //Debug.Log(scrollSlider.value);
     }
 
     public void Quit()
