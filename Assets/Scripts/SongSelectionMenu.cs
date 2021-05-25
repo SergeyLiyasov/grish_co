@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,13 +13,13 @@ using UnityEngine.Events;
 public class SongSelectionMenu : MonoBehaviour
 {
     public List<SongMetadata> SongMetadatas { get; set; }
-    public static bool UseBinarySearch { get; set; }
+    public static bool UsePrefixSearch { get; set; }
 
     private void Start()
     {
-        songButtonNames = new Dictionary<string, GameObject>();
+        songButtonNames = new SortedList<string, GameObject>();
         FillSongList();
-        Debug.Log(UseBinarySearch);
+        //Debug.Log(UsePrefixSearch);
     }
 
     public void FillSongList()
@@ -28,7 +29,7 @@ public class SongSelectionMenu : MonoBehaviour
         {
             var name = song.Split('\\').Last();
             var strArray = name.Split('-');
-            var firstPart = strArray[0].Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+            var firstPart = strArray[0].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var songId = int.Parse(firstPart[0]);
             var artistParsed = string.Join(" ", firstPart, 1, firstPart.Length - 1);
             var songName = strArray[1].Trim();
@@ -58,32 +59,17 @@ public class SongSelectionMenu : MonoBehaviour
 
     public void SearchSong()
     {
-        var inputText = string.Empty;
-        if (inputField.text != string.Empty)
-            inputText = inputField.text.ToLower().Trim();
-        foreach (var button in songButtonNames)
-            button.Value.SetActive(true);
-        if (songButtonNames.Any(x => x.Key.ToLower().Contains(inputText)))
-        {
-            var searchResults = new List<GameObject>();
-            if (UseBinarySearch)
-            {
-                var loweredDict = songButtonNames.ToDictionary(k => k.Key.ToLower(), k => k.Value);
-                searchResults = PrefixSearch(loweredDict, inputText);
-            }
-            else    
-                searchResults = songButtonNames.Where(x => x.Key.ToLower().Contains(inputText)).Select(x => x.Value).ToList();
-            foreach (var button in songButtonNames)
-            {
-                if (!searchResults.Contains(button.Value))
-                    button.Value.SetActive(false);
-            }
-        }
-        else if (inputText != string.Empty)
-        {
-            foreach (var button in songButtonNames)
-                button.Value.SetActive(false);
-        }
+        var inputText = inputField.text.ToLower().Trim();
+
+        foreach (var button in songButtonNames.Values)
+            button.SetActive(false);
+
+        var searchResults = UsePrefixSearch
+                ? PrefixSearch(songButtonNames, inputText)
+                : songButtonNames.Where(x => x.Key.ToLower().Contains(inputText)).Select(x => x.Value);
+
+        foreach (var button in searchResults)
+            button.SetActive(true);
     }
 
     public void BackToMenu()
@@ -96,57 +82,46 @@ public class SongSelectionMenu : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
-    private int BinarySearch(List<string> list, string str)
+    private static int BinSearchLeftBorder(IList<string> list, string prefix)
     {
-        str = str.Substring(0, str.Length);
-        var left = 0;
-        var right = list.Count - 1;
-        var index = -1;
-        var found = false;
-        while (!found && left <= right)
+        var left = -1;
+        var right = list.Count;
+        while (left + 1 != right)
         {
-            var middle = left + (right - left) / 2;
-            var current = list[middle].Substring(0, str.Length);
-            var result = str.CompareTo(current);
-
-            if (result == 0)
-            {
-                found = true;
-                index = middle;
-            }
-            else if (result > 0)
-                left = middle + 1;
+            var middle = (left + right) / 2;
+            if (string.Compare(list[middle], prefix, StringComparison.OrdinalIgnoreCase) < 0)
+                left = middle;
             else
-                right = middle - 1;
+                right = middle;
         }
-        return index;
+        return left;
     }
 
-    private List<GameObject> PrefixSearch(Dictionary<string, GameObject> dict, string prefix)
+    private static int BinSearchRightBorder(IList<string> list, string prefix)
     {
-        var keyList = dict.Select(x => x.Key.ToLower()).ToList();
-        keyList.Sort();
-        var index = BinarySearch(keyList, prefix);
-        if (index == -1)
-            return new List<GameObject>();
-        var rangeStart = index;
-        var rangeEnd = index;
-        while (rangeStart > -1 && keyList[rangeStart].ToLower().StartsWith(prefix.ToLower()))
-            rangeStart--;
-
-        while (rangeEnd < keyList.Count && keyList[rangeEnd].ToLower().StartsWith(prefix.ToLower()))
-            rangeEnd++;
-
-        var result = new List<GameObject>();
-        foreach(var key in keyList.GetRange(rangeStart + 1, rangeEnd - rangeStart - 1))
+        var left = -1;
+        var right = list.Count;
+        while (left + 1 != right)
         {
-            result.Add(dict[key]);
+            var middle = left + (right - left) / 2;
+            if (string.Compare(list[middle], prefix, StringComparison.OrdinalIgnoreCase) <= 0 ||
+                list[middle].StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                left = middle;
+            else
+                right = middle;
         }
-        return result;
+        return right;
+    }
+
+    private IEnumerable<GameObject> PrefixSearch(SortedList<string, GameObject> buttons, string prefix)
+    {
+        var left = BinSearchLeftBorder(buttons.Keys, prefix);
+        var right = BinSearchRightBorder(buttons.Keys, prefix);
+        return buttons.Values.Skip(left + 1).Take(right - left - 1);
     }
 
     [SerializeField] private GameObject songTemplate;
     [SerializeField] private GameObject songContainer;
     [SerializeField] private TMP_InputField inputField;
-    private Dictionary<string, GameObject> songButtonNames;
+    private SortedList<string, GameObject> songButtonNames;
 }

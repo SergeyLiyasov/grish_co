@@ -52,9 +52,9 @@ public class MainMenu : MonoBehaviour
     public void ActivateBinarySearch(bool isOn)
     {
         if (isOn)
-            SongSelectionMenu.UseBinarySearch = true;
+            SongSelectionMenu.UsePrefixSearch = true;
         else
-            SongSelectionMenu.UseBinarySearch = false;
+            SongSelectionMenu.UsePrefixSearch = false;
     }
 
     [SerializeField] private Slider volumeSlider;
